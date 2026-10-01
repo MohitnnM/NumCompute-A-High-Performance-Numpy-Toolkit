@@ -1,1 +1,22 @@
+# Build configuration
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
+# Package metadata
+[project]
+name = "numcompute"
+version = "0.1.0"
+description = "A NumPy-based scientific computing toolkit for data processing and machine learning workflows."
+readme = "README.md"
+requires-python = ">=3.12"
+
+# Runtime dependencies
+dependencies = [
+    "numpy"
+]
+
+# Tells setuptools where to look for the package
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["numcompute*"]
