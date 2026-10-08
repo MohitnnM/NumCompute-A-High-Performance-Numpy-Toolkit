@@ -16,8 +16,9 @@ def load_csv(csv_path, file_delimiter=","):
     """
         Loads a CSV file and returns it as an NumPy array.
 
-        This function loads a CSV file and returns its contents as a NumPy array. It parses the data using a specified delimiter, and 
-        replaces missing values with placeholder NaN values.
+        This function loads a CSV file and returns its contents as a NumPy 
+        array. It parses the data using a specified delimiter, and replaces
+        missing values with placeholder NaN values.
 
         Parameters:
             csv_path: The path to a CSV file being loaded.
@@ -33,7 +34,7 @@ def load_csv(csv_path, file_delimiter=","):
         names=True,
         delimiter=file_delimiter, 
         missing_values="", 
-        filling_values=np.nan #Use NaN to fill in missing numeric values to maintain array shape 
+        filling_values=np.nan       # Use NaN to fill in missing numeric values to maintain array shape 
     )
 
     return csv_data
