@@ -28,3 +28,32 @@ Metrics in this module are designed to operate on NumPy arrays and provide
 consistent behaviour during comparison of predicted values and their related
 target values. 
 """
+import numpy as np
+
+def accuracy(y_pred, y_true):
+    return np.divide(np.sum(np.where(y_pred ==y_true,1,0)),y_true.size)
+
+def precision(y_pred, y_true, pred_class):
+  pos_index = y_pred == pred_class
+  return np.divide(np.sum(y_pred[pos_index] == y_true[pos_index]), y_pred[pos_index].size)
+
+def recall(y_pred, y_true, pred_class):
+  pos_index = y_true == pred_class
+  return np.divide(np.sum(y_pred[pos_index] == y_true[pos_index]), y_true[pos_index].size)
+
+def f1score(y_pred, y_true, pred_class):
+   prec = precision(y_pred,y_true,pred_class)
+   reca = recall(y_pred,y_true,pred_class)
+   return 2* ((prec*reca)/(prec+reca))
+
+def confusion_mtraix(y_pred, y_true, pred_class):
+   pred_pos = y_pred == pred_class
+   pred_neg = y_pred != pred_class
+   true_pos = np.count_nonzero(y_pred[pred_pos] == y_true[pred_pos])
+   true_neg = np.count_nonzero(y_pred[pred_neg] == y_true[pred_neg])
+   false_pos = np.count_nonzero(y_pred[pred_pos] != y_true[pred_pos])
+   flase_neg = np.count_nonzero(y_pred[pred_neg] != y_true[pred_neg])
+   return (true_pos,false_pos,true_neg,flase_neg)
+
+def MSE(y_pred, y_true):
+   return np.divide(np.sum(np.power(y_pred-y_true,2)),y_true.size)
