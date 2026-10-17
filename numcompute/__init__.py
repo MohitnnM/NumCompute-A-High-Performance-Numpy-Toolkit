@@ -10,3 +10,5 @@ The purpose of this package is to simulate core scientific computing and
 machine learning workflows using only Python and NumPy, focusing on 
 vectorisation, numerical stability, consistent APIs, and reproducible behaviour.
 """
+
+from .io import load_csv
