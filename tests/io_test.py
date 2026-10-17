@@ -3,8 +3,11 @@
 """
 
 import unittest
+
 import numpy as np
+
 from numcompute.io import load_csv
+
 
 class TestLoadCSV(unittest.TestCase):
     def test_load_csv(self):
@@ -118,7 +121,7 @@ class TestLoadCSV(unittest.TestCase):
         np.testing.assert_array_equal(resulting_array, expected_array)
 
     def test_invalid_path(self):
-        
+
         non_existing_file = "a_test_path.csv"
         with self.assertRaises(FileNotFoundError):
             load_csv(non_existing_file)
@@ -128,10 +131,10 @@ class TestLoadCSV(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             load_csv(file)
-    
+
     def test_shape(self):
         file = "tests/test_csv_files/test_shape_file.csv"
-        
+
         result = load_csv(file)
 
         np.testing.assert_array_equal(result.shape,[1,3])

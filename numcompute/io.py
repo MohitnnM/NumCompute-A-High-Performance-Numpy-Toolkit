@@ -60,7 +60,7 @@ def load_csv(csv_path, file_delimiter=","):
         raise ValueError("Delimiter must contain exactly one character.")
 
     csv_data = np.genfromtxt(
-        csv_path, 
+        csv_path,
         dtype=float,
         delimiter=file_delimiter,
         filling_values=np.nan,

@@ -13,10 +13,31 @@ requires-python = ">=3.12"
 
 # Runtime dependencies
 dependencies = [
-    "numpy"
+    "numpy",
 ]
 
 # Tells setuptools where to look for the package
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["numcompute*"]
+
+# Development-only dependencies (not installed for end users)
+[dependency-groups]
+dev = [
+    "ruff>=0.17.1",
+]
+
+# Ruff: formatter and linter
+[tool.ruff]
+line-length = 88
+extend-exclude = ["demo"]
+
+# Lint rules: pycodestyle (E, W), Pyflakes (F), import sorting (I),
+# pep8-naming (N), bugbear (B) and modern-Python upgrades (UP)
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "N", "B", "UP"]
+# Allow uppercase names like X / X_arr (standard ML convention for data matrices)
+ignore = ["N803", "N806"]
+
+[tool.ruff.format]
+quote-style = "double"

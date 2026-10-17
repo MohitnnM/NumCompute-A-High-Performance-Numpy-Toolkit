@@ -1,0 +1,9 @@
+# Virtual environment (managed by uv)
+.venv/
+
+# Python bytecode and build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
