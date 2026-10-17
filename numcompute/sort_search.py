@@ -121,5 +121,3 @@ def binary_search(sorted_array, x):
             left = mid_idx + 1
 
     return left, False
-
-print(topk(np.array([2,10,3,24,62,15,1,50,4,7]),3,False, False))
