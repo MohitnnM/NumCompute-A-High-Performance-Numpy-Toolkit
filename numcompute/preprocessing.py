@@ -14,10 +14,8 @@ all numerical operations.
 Classes Included:
   - `StandardScaler` (z-score standardisation)
   - `MinMaxScaler` (scale to a given range)
-  - `OneHotEncoder` (for categorical variables):
-
-Potential Classes:
-  - *(Optional)* Simple imputer to replace NaN with a constant
+  - `OneHotEncoder` (for categorical variables)
+  - `SimpleImputer` (replace NaN with a constant)
 
 Implementation requirements:
 - Core transformations should be implemented using vectorised NumPy operations,
@@ -370,6 +368,112 @@ class OneHotEncoder:
             blocks.append(block)
 
         return np.hstack(blocks).astype(float)
+
+    def fit_transform(self, X):
+        """
+        Fits to X, then transforms it. Same as fit(X).transform(X).
+        """
+
+        return self.fit(X).transform(X)
+
+
+class SimpleImputer:
+    """
+    Replaces missing values (NaN) with a constant.
+
+    APIs implemented:
+      - `fit(X) -> self`: records the number of features. Nothing else is
+         learned, since the fill value is a constant.
+
+      - `transform(X) -> X_out`: replaces every NaN in X with fill_value.
+
+      - `fit_transform(X) -> X_out`: fits the transformer to X, then
+         transforms using the learned state.
+    """
+
+    def __init__(self, fill_value=0.0):
+        """
+        Parameters:
+            fill_value:
+                Number used to replace NaN. Defaults to 0.0.
+
+        Raises:
+            TypeError:
+                If fill_value is not a number.
+        """
+
+        if not isinstance(fill_value, (int, float, np.number)):
+            raise TypeError("fill_value must be a number.")
+
+        self.fill_value = fill_value
+
+    def fit(self, X):
+        """
+        Records the number of features in X.
+
+        Parameters:
+            X:
+                2D array-like of shape (n_samples, n_features). May contain
+                NaN.
+
+        Returns:
+            self, with n_features_in_ set.
+
+        Raises:
+            TypeError, ValueError:
+                If X is not a valid 2D numeric array (see check_array).
+
+        Time Complexity:
+            O(n * f) for n samples and f features (input validation).
+
+        Space Complexity:
+            O(1).
+        """
+
+        X = check_array(X, allow_nan=True)
+
+        self.n_features_in_ = X.shape[1]
+
+        return self
+
+    def transform(self, X):
+        """
+        Replaces every NaN in X with fill_value.
+
+        Returns a new array; the input is not modified.
+
+        Parameters:
+            X:
+                2D array-like with the same number of features as in fit.
+
+        Returns:
+            A new float array of shape (n_samples, n_features).
+
+        Raises:
+            NotFittedError:
+                If fit has not been called.
+
+            ValueError:
+                If the number of features differs from fit.
+
+        Time Complexity:
+            O(n * f) for n samples and f features.
+
+        Space Complexity:
+            O(n * f) for the returned array.
+        """
+
+        check_is_fitted(self, ["n_features_in_"])
+
+        X = check_array(X, allow_nan=True)
+
+        if X.shape[1] != self.n_features_in_:
+            raise ValueError(
+                f"X has {X.shape[1]} features, but SimpleImputer was "
+                f"fitted with {self.n_features_in_}."
+            )
+
+        return np.where(np.isnan(X), self.fill_value, X)
 
     def fit_transform(self, X):
         """
