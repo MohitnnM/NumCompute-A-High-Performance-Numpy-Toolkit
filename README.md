@@ -1,6 +1,23 @@
 # NumCompute-A-High-Performance-Numpy-Toolkit
 A Numpy based scientific computing toolkit that features preprocessing, statistics, metrics, ranking, numerical gradients, pipelines and performance benchmarking.
 
+## Modules
+
+| Module | What it provides | Status |
+|---|---|---|
+| `io` | `load_csv`: load a CSV into a NumPy array, with custom delimiters and NaN for missing values | Done |
+| `preprocessing` | `StandardScaler`, `MinMaxScaler`, `OneHotEncoder`, `SimpleImputer` | Done |
+| `optim` | `grad` and `jacobian` by finite differences (forward or central) | Done |
+| `sort_search` | Stable and multi-key sort, `topk`, quickselect, `binary_search` | In progress |
+| `rank` | `rank` with tie handling, `percentile` | In progress |
+| `stats` | Descriptive statistics, histogram, quantiles | In progress |
+| `metrics` | Classification metrics, confusion matrix, `mse` | In progress |
+| `pipeline` | `Pipeline` for chaining transformers and models | In progress |
+| `benchmarking` | Performance comparisons | In progress |
+| `utils`, `exceptions` | Shared helpers (`check_array`, `check_is_fitted`) and `NotFittedError` | Done |
+
+Module owners: update your row when you push.
+
 ## Setup
 
 This project uses [uv](https://docs.astral.sh/uv/) to manage its Python environment and dependencies. Python 3.12 or newer is required.
@@ -31,6 +48,19 @@ This project uses [uv](https://docs.astral.sh/uv/) to manage its Python environm
 
    Alternatively, prefix commands with `uv run` to use the environment without activating it.
 
+## Quickstart
+
+```python
+from numcompute.io import load_csv
+from numcompute.preprocessing import SimpleImputer, StandardScaler
+
+X = load_csv("tests/test_csv_files/missing_data_multiple.csv")
+X = SimpleImputer(fill_value=0.0).fit_transform(X)
+X_scaled = StandardScaler().fit_transform(X)
+```
+
+For a full walkthrough of every module, open [`demo/quickstart.ipynb`](demo/quickstart.ipynb) and choose the `.venv` Python as the kernel. If VS Code asks to install `ipykernel`, accept.
+
 ## Running the tests
 
 ```bash
@@ -54,6 +84,15 @@ uv run ruff format --check --diff .
 ```
 
 Run both `ruff format` and `ruff check` before committing.
+
+## Conventions
+
+- **Tests:** one file per module, named `tests/<module>_test.py`, written with `unittest`.
+- **Input checks:** use `check_array` from `numcompute.utils` to validate array input. It rejects 1D input; reshape with `X.reshape(-1, 1)`.
+- **Fitted attributes:** anything learned in `fit` ends with `_` (e.g. `self.mean_`) and is created only inside `fit`. Call `check_is_fitted` at the start of `transform` and `predict`.
+- **Private helpers:** functions used only inside one module start with `_` (e.g. `_check_inputs`).
+- **Docstrings:** include Parameters, Returns, Raises, and Time and Space Complexity (see `preprocessing.py`).
+- **Quickstart notebook:** add a short section for your module to `demo/quickstart.ipynb`. Clear all outputs before committing to avoid merge conflicts.
 
 ## Adding dependencies
 
