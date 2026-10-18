@@ -30,7 +30,7 @@ def rank(data, method='average'):
                 - dense: unique values are given to distinct values.
 
         Returns:
-            A 2D floating-point NumPy array with shape (n_rows, n_columns).
+            A 1D floating-point NumPy array with shape (n_rows)
             Missing values are represented using np.nan.
 
         Raises: 
@@ -55,20 +55,29 @@ def rank(data, method='average'):
 
   match method:
     case 'average':
-        data_ranked_ordinal = np.argsort(data).argsort() # Ordinal rankings for fractional/average ranking comptuations.
-        # Need to cumsum + mean for each position in the sorted array
-        print("Average ranking:", data.argsort().mean())
+        data_ranked_ordinal = np.argsort(data.flatten()).argsort() # Ordinal rankings for fractional/average ranking computations. 
+                                                                   # Data is first flattened.
+        data_sorted = np.sort(data)                             
+        unique, data_counts = np.unique(data_sorted, return_counts='True') # How many times a unique element shows up in the sorted array.
+        
+        print(data_sorted)
+        print(data_counts)
+        print("Average ranking:")
+
     case 'ordinal':
-        data_sorted = np.argsort(data)  # Initial processing of data, ranking only works on sorted data.
+        data_sorted = np.argsort(data.flatten())  # Initial processing of data, ranking only works on sorted data.
+                                                  # Data is first flattened.
         data_ranked_ordinal = np.argsort(data_sorted)
-        print("Ordinal ranking:",  data_ranked_average + 1)  #Returns ranking using base 1 
+        print("Ordinal ranking:",  data_ranked_ordinal + 1)  #Returns ranking using base 1 
 
     case 'dense':
-        data_ranked_dense = np.unique_inverse(data)  # Sorts unique elements and returns sorted positions that can reconstruct original array
+        data_ranked_dense = np.unique_inverse(data.flatten())  # Sorts unique elements and returns sorted positions that can reconstruct original array
                                                       # Corresponds to a dense ranking, as indices follow pattern of ties sharing positions
                                                       # while next highest element is given the the next position after ties.
+                                                      # Data is first flattened.
                                                                     
         print ("Dense ranking:", data_ranked_dense.inverse_indices + 1)   # Returns ranking using base 1 
+
 
 def percentile(data, q, interpolation):
     """
@@ -83,14 +92,12 @@ def percentile(data, q, interpolation):
                 The provided percentile. In decimals.
             
             interpolation:
-                The kind of percentile which is computed.
-               - linear: provides the percentile using linear interpolation.
-               - lower:  a number for which a provided percentage of values 
-                        are lower than.
-               - higher: a number for which a provided percentage of values 
-                        are higher than.
-               - midpoint: provides the percentile corresponding to the
-                 50th percentile, i.e 50% of values are above and below.   
+                The kind of percentile which is computed utilizing mathematical
+                percentile formula. Has the following interpolations:
+                - linear: the default, using linear interpolation formula.
+                - lower: lowest data point
+                - higher: highest data point
+                - midpoint: the average between lowest and highest point.
 
 
         Returns:
@@ -115,31 +122,49 @@ def percentile(data, q, interpolation):
       case 'linear':
         data_flattened = data.flatten()
         data_sorted = np.sort(data_flattened)
-        print(data_sorted)
 
         virtual_idx = q * (len(data_sorted) - 1)  # i + g in linear interpolation equation
-        i = int(virtual_idx)  # Is the floor of g
-        j = i + 1             #  x(i+1) for final equation.
+        lower_idx = int(virtual_idx)  # Is the floor of g
+        higher_idx = i + 1             #  i+1 term for final equation.
         fractional = virtual_idx - i  # g in the linear interpolation equation.
         
-        a = data_sorted[i] 
-        b = data_sorted[j]
+        a = data_sorted[lower_idx]  # x(i) in percentile equation/
+        b = data_sorted[higher_idx]  # x(i + 1) as described in percentile equation.
 
         percentile = a + (b-a) * fractional
         print("the percentile is: ", percentile)
+
       case 'lower':
-        a
+        data_flattened = data.flatten()
+        data_sorted = np.sort(data_flattened)
+
+        virtual_idx = q * (len(data_sorted) - 1)  # i + g in linear interpolation equation
+        lower_idx = int(virtual_idx)    # Index of the lower interpolation.
+        print("the percentile is: ", data_sorted[lower_idx])
+
       case 'higher':
-        a
+        data_flattened = data.flatten()
+        data_sorted = np.sort(data_flattened)
+
+        virtual_idx = q * (len(data_sorted) - 1)  # i + g in linear interpolation equation
+        higher_idx = int(virtual_idx) + 1   # Index of the higher interpolation.
+        print("the percentile is: ", data_sorted[higher_idx])
+
       case 'midpoint':
-        a
+        data_flattened = data.flatten()
+        data_sorted = np.sort(data_flattened)
+
+        virtual_idx = q * (len(data_sorted) - 1)
+        lower_idx = int(virtual_idx) # Index of the lower data point.
+        higher_idx = lower_idx + 1  # Index of the higher data point.
+
+        percentile_midpoint = (data_sorted[lower_idx] + data_sorted[higher_idx]) / 2    # Midpoint interpolation
+        print("the percentile is: ", percentile_midpoint)
+
+
+
 
 # x = np.random.randint(0,10, size=6)    # rank example
 x = np.array([0, 2, 3, 2])
 print("Initial Array: ", x)    #Unranked array
 rank(x, 'average')   
-
-y = np.array([2, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 8, 8, 12, 20])
-z = np.array([[10, 7, 4], [3, 2, 1]])
-
-percentile(z, 0.50, 'linear')
