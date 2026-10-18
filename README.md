@@ -8,7 +8,7 @@ A Numpy based scientific computing toolkit that features preprocessing, statisti
 | `io` | `load_csv`: load a CSV into a NumPy array, with custom delimiters and NaN for missing values | Done |
 | `preprocessing` | `StandardScaler`, `MinMaxScaler`, `OneHotEncoder`, `SimpleImputer` | Done |
 | `optim` | `grad` and `jacobian` by finite differences (forward or central) | Done |
-| `sort_search` | Stable and multi-key sort, `topk`, quickselect, `binary_search` | In progress |
+| `sort_search` | Stable and multi-key sort, `topk`, quickselect, `binary_search` | Done |
 | `rank` | `rank` with tie handling, `percentile` | In progress |
 | `stats` | Descriptive statistics, histogram, quantiles | In progress |
 | `metrics` | Classification metrics, confusion matrix, `mse` | In progress |
