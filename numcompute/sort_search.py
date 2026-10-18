@@ -14,8 +14,56 @@ def stable_sort(values):
 
     return sorted_array
 
-def multi_key_sort(self):
-    pass
+def multi_key_sort(values, keys_array):
+    """
+        Parameters:
+            values: The given 2D NumPy array, containing values to sort.
+
+            keys_array: A sequence of column indices that specify the 
+                sorting priority. The first index is the primary key, 
+                followed by any number of necessarry tie-breaking keys.
+
+
+        Returns:
+            A new 2D NumPy array of columns sorted according to specified
+            sorting column keys. 
+
+        Raises:
+            ValueError: If values is not a 2D array or if no sorting keys
+                        are provided.
+            
+            IndexError: If the sorting keys are out of bounds. 
+
+        Time Complexity:
+            O(n log n), where n is the number of rows being sorted.
+
+        Space Complexity:
+            O(n * m), where n is the number of rows and m is the number
+            of columns.
+    """
+    if values.ndim != 2:
+        raise ValueError(
+            f"Expected a 2D array, but got a {values.ndim}D array instead."
+        )
+
+    if len(keys_array) == 0:
+        raise ValueError("Please provide at least one sorting key")
+
+    for key in keys_array:
+        if not (0 <= key < values.shape[1]):
+            raise IndexError(
+                f"The column index {key} is out of bounds for array with " 
+                f"{values.shape[1]} columns."
+            )
+
+    sort_keys = [values[:, key] for key in reversed(keys_array)]
+
+    sort_indices = np.lexsort(sort_keys)
+    sorted_values_arr = values[sort_indices]
+
+    return sorted_values_arr
+
+
 
 #SELECTION
 def topk(values, k, largest=True, return_indices=True):
@@ -24,9 +72,12 @@ def topk(values, k, largest=True, return_indices=True):
 
         Parameters:
             values: The given NumPy array, containing values to select from.
+
             k: The number of values to select.
+
             largest: Boolean to specify whether to select the largest, if 
             True, or the smallest, if False, k values. 
+
             return_indices: Boolean to specify if the function returns an
                 array of indices of selected values, if True, or values
                 themselves, if False. 
@@ -78,8 +129,95 @@ def topk(values, k, largest=True, return_indices=True):
 
     return values[sorted_idx]
 
-def quickselect(self):
-    pass
+def _partition(values, left, right):
+    """
+        Helper function partitions part of an array, using the final element
+        as the pivot. 
+
+        If a value is less than or equal to the pivot, it is shifted left,
+        while larger values are shifted right.
+
+        Parameters:
+            values: A 1D array that is modified in place.
+
+            left: The starting index of the partition array.
+
+            right: The ending index of the partition array.
+
+        Returns:
+            The last index of the sorted array.
+
+        Time Complexity:
+            O(n)
+
+        Space Complexity:
+            O(1)
+    """
+    pivot = values[right]
+
+    boundary_idx = left - 1
+
+    for idx in range(left, right):
+        if values[idx] <= pivot:
+            boundary_idx += 1
+            values[boundary_idx], values[idx] = (
+                values[idx], 
+                values[boundary_idx],
+            )
+    pivot_idx = boundary_idx + 1
+    values[boundary_idx+1], values[right] = values[right], values[boundary_idx+1]
+
+    return pivot_idx
+    
+def quickselect(values, k):
+    """
+        Selects the k-th smallest element in an unordered 1D array using
+        the Quickselect algorithm.
+
+        Parameters:
+            values: The given NumPy array, containing values to select from.
+            k: The rank of the desired ement using 1-based indexing.
+
+        Returns:
+            k-th smallest value.
+
+        Raises:
+            ValueError: If the array is empty, not oone dimensional or k
+            is outside valid range.
+
+        Time Complexity:
+            Average case: O(n)
+            Worst case: O(n^2)
+
+        Space Complexity:
+            O(1)
+    """
+    if len(values) == 0:
+        raise ValueError("Array can not be empty.")   
+    
+    if k <= 0 or k > len(values):
+        raise ValueError(
+            "k must be between 1 and the number of values, inclusive."
+        )
+    
+    if not values.ndim == 1:
+        raise ValueError("Array must be one dimensional.")
+
+    left = 0
+    right = len(values) - 1
+    while left <= right:
+
+        pivot_idx = _partition(values, left, right)
+
+        if pivot_idx == k - 1:
+            return values[pivot_idx]
+
+        elif pivot_idx > k - 1:
+            right = pivot_idx - 1
+
+        else:
+            left = pivot_idx + 1
+    
 
 #SEARCHING
 def binary_search(sorted_array, x):
@@ -88,6 +226,7 @@ def binary_search(sorted_array, x):
 
         Parameters:
             sorted_array: A NumPy array sorted in ascending order.
+
             x: The target value, i.e. the value being searched for.
 
         Return Values:
@@ -97,6 +236,7 @@ def binary_search(sorted_array, x):
 
         Time complexity:
             Best case: O(1)
+
             Average and worst case: O(log n)
 
         Space Complexity:
