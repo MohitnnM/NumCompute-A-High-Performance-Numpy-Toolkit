@@ -125,3 +125,69 @@ def check_is_fitted(estimator, attributes):
             f"This {type(estimator).__name__} instance is not fitted yet. "
             "Call 'fit' before using this estimator."
         )
+
+def check_1d_array(X, dtype=float, allow_nan=False, allow_empty_arr=False):
+    """
+        Converts input to a NumPy array and checks that it is a non-empty
+        1D array.
+
+        Parameters:
+            X:
+                Array-like input of shape (n_features,).
+
+            dtype:
+                Target dtype. Defaults to float. Use None to keep the
+                input's dtype (e.g. strings for OneHotEncoder).
+
+            allow_nan:
+                If False (default), numeric input containing NaN or Inf
+                is rejected.
+
+        Returns:
+            A 1D NumPy array of shape (n_features,).
+
+        
+        Raises:
+            TypeError:
+                If X cannot be converted to dtype.
+
+            ValueError:
+                If X is ragged, not 1D, empty, or contains NaN/Inf when
+                allow_nan is False.
+
+        Time Complexity:
+            O(n) where n is the number of elements in X.
+
+        Space Complexity:
+            O(n) if X has to be copied or converted, otherwise O(1).
+    """
+
+    try:
+        X_arr = np.asarray(X, dtype=dtype)
+    except (TypeError, ValueError) as e:
+        if "inhomogeneous" in str(e):
+            raise ValueError(
+                "Input forms a ragged array with inconsistent row lengths."
+            ) from e
+
+        dtype_name = getattr(dtype, "__name__", dtype)
+        raise TypeError(
+            f"Input cannot be converted to {dtype_name}."
+        ) from e
+
+    if X_arr.ndim != 1:
+        raise ValueError(
+            f"Expected a 1D array, got a {X_arr.ndim}D array instead."
+        )
+
+    if X_arr.size == 0 and not allow_empty_arr:
+        raise ValueError("Input array is empty.")
+
+    # Only numeric arrays can hold NaN/Inf, so string arrays skip this.
+    if not allow_nan and np.issubdtype(X_arr.dtype, np.number):
+        if not np.all(np.isfinite(X_arr)):
+            raise ValueError(
+                "Input contains NaN or Inf. Set allow_nan=True to allow them."
+            )
+
+    return X_arr

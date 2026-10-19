@@ -6,9 +6,35 @@ a manual quickselect implementation, and a binary search for locating
 values or finding their insertion position in sorted arrays. 
 """
 import numpy as np
-
+from numcompute.utils import check_array, check_1d_array
 # SORTING
 def stable_sort(values):
+    """
+        Sorts a 1D array in ascending order, preserving relative order
+        of elements, with equal comparison.
+
+        Parameters:
+            values: 
+                1D array-like containing values to sort.
+
+        Returns:
+            New 1D NumPy array containing sorted values.
+
+        Raises:
+            ValueError, if values are not 1 dimensional.
+
+        Time Complexity:
+            O(n log n), where n refers to the number of elements.
+
+        Space Complexity:
+            O(n) for the returned sorted array.
+    """
+    values = check_1d_array(
+        values, 
+        dtype=None, 
+        allow_empty_arr=True, 
+        allow_nan=True
+    )
 
     sorted_array = np.sort(values, kind="stable")
 
@@ -16,12 +42,16 @@ def stable_sort(values):
 
 def multi_key_sort(values, keys_array):
     """
+        Sorts the rows of the given 2D NumPy array using multiple columns
+        as sorting keys. All keys are sorted in ascending order.
+
         Parameters:
             values: The given 2D NumPy array, containing values to sort.
 
             keys_array: A sequence of column indices that specify the 
                 sorting priority. The first index is the primary key, 
                 followed by any number of necessarry tie-breaking keys.
+                
 
 
         Returns:
@@ -29,10 +59,12 @@ def multi_key_sort(values, keys_array):
             sorting column keys. 
 
         Raises:
-            ValueError: If values is not a 2D array or if no sorting keys
-                        are provided.
+            ValueError: 
+                If values is not a non-empty 2D array or if no 
+                sorting keys are provided.
             
-            IndexError: If the sorting keys are out of bounds. 
+            IndexError: 
+                If the sorting keys are out of bounds. 
 
         Time Complexity:
             O(n log n), where n is the number of rows being sorted.
@@ -41,10 +73,7 @@ def multi_key_sort(values, keys_array):
             O(n * m), where n is the number of rows and m is the number
             of columns.
     """
-    if values.ndim != 2:
-        raise ValueError(
-            f"Expected a 2D array, but got a {values.ndim}D array instead."
-        )
+    values = check_array(values, dtype=None)
 
     if len(keys_array) == 0:
         raise ValueError("Please provide at least one sorting key")
@@ -71,24 +100,30 @@ def topk(values, k, largest=True, return_indices=True):
         Selects the k largets or smallest values from the given array.
 
         Parameters:
-            values: The given NumPy array, containing values to select from.
+            values: 
+                A non-empty NumPy array, containing values to select from.
 
-            k: The number of values to select.
+            k: 
+                The number of values to select. Must be between 1 and 
+                number of input values, inclusive.
 
-            largest: Boolean to specify whether to select the largest, if 
-            True, or the smallest, if False, k values. 
+            largest: 
+                Boolean to specify whether to select the largest, if 
+                True, or the smallest, if False, k values. Defaults 
+                to True. 
 
             return_indices: Boolean to specify if the function returns an
                 array of indices of selected values, if True, or values
-                themselves, if False. 
+                themselves, if False. Defaults to True.
         
         Returns:
             A NumPy array containing either the selected values or their
-                indices.
+            indices.
         
         Raises:
-            ValueError: If k is less than 1, equal to 0, or greater than
-                the number of values.
+            ValueError: 
+                If array is empty, not one-dimensional, contains NaN or Inf,
+                or k is outside of valid range.
 
         Time Complexity:
             O(n + k log(k)), where n is the number of input values, and
@@ -98,6 +133,14 @@ def topk(values, k, largest=True, return_indices=True):
             O(n), mainly as np.argpartition returns index array, proportional
             to input size.
     """
+
+    values = check_1d_array(
+        values,
+        dtype=None,
+        allow_empty_arr=False,
+        allow_nan=False
+    )
+
     if k <= 0 or k > len(values):
         raise ValueError(
             "k must be greater than 0 and less than the number of values."
@@ -174,16 +217,24 @@ def quickselect(values, k):
         Selects the k-th smallest element in an unordered 1D array using
         the Quickselect algorithm.
 
+        value of k uses 1-based indexing, so k=1 selects the smallest 
+        element and k=len(values) or k equals the length of the given array
+        returns the largest element. Partioning is performed in place.
+
         Parameters:
-            values: The given NumPy array, containing values to select from.
-            k: The rank of the desired ement using 1-based indexing.
+            values: 
+                The given NumPy array, containing values to select from.
+
+            k: 
+                The rank of the desired element using 1-based indexing.
 
         Returns:
             k-th smallest value.
 
         Raises:
-            ValueError: If the array is empty, not oone dimensional or k
-            is outside valid range.
+            ValueError: 
+                If the array is empty, not one dimensional, contains
+                NaN or Inf, or k is outside valid range.
 
         Time Complexity:
             Average case: O(n)
@@ -192,16 +243,19 @@ def quickselect(values, k):
         Space Complexity:
             O(1)
     """
-    if len(values) == 0:
-        raise ValueError("Array can not be empty.")   
+    values = check_1d_array(
+        values,
+        dtype=None,
+        allow_empty_arr=False,
+        allow_nan=False
+    )
     
     if k <= 0 or k > len(values):
         raise ValueError(
             "k must be between 1 and the number of values, inclusive."
         )
     
-    if not values.ndim == 1:
-        raise ValueError("Array must be one dimensional.")
+    
 
     left = 0
     right = len(values) - 1
@@ -234,14 +288,23 @@ def binary_search(sorted_array, x):
             the target value if found and the existence boolean indicating
             if value exists in the array.
 
+        Raises:
+            ValueError:
+                If input array, sorted_array, is not one-dimensional.
+
         Time complexity:
             Best case: O(1)
-
             Average and worst case: O(log n)
 
         Space Complexity:
             O(1)
     """
+    sorted_array = check_1d_array(
+        sorted_array,
+        dtype=None,
+        allow_empty_arr=True,
+        allow_nan=False
+    )
 
     left = 0
     right = len(sorted_array) - 1
