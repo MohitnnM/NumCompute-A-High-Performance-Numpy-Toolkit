@@ -10,3 +10,24 @@ The purpose of this package is to simulate core scientific computing and
 machine learning workflows using only Python and NumPy, focusing on
 vectorisation, numerical stability, consistent APIs, and reproducible behaviour.
 """
+
+from .io import load_csv
+from .optim import grad, jacobian
+from .preprocessing import MinMaxScaler, OneHotEncoder, SimpleImputer, StandardScaler
+from .metrics import accuracy, precision, recall, f1score, confusion_matrix, MSE
+
+__all__ = [
+    "load_csv",
+    "grad",
+    "jacobian",
+    "MinMaxScaler",
+    "OneHotEncoder",
+    "SimpleImputer",
+    "StandardScaler",
+    "accuracy",
+    "precision",
+    "recall",
+    "f1score",
+    "confusion_matrix",
+    "MSE"
+]
