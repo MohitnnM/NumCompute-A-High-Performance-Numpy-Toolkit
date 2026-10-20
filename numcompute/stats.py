@@ -23,21 +23,13 @@ def mean(data):
         Returns:
             A scalar or an array containing the resulting means
 
-        Raises: 
-            Type Error:
-                If file_delimiter is not a string.
-            
-            ValueError:
-                If file_delimiter is not one character or CSV file is empty.
-
-            FileNotFoundError:
-                If the specified CSV file does not exist.
+        Raises:
         
         Time Complexity:
-            O(n) where n is the number of values read from the file.
+            O(n) where n is the size of the data
 
         Space Complexity:
-            O(n) for the returned NumPy array. 
+            O(n) where n is the size of the data
     """
     return np.mean(data)
 
