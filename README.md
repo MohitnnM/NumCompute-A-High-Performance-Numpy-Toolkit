@@ -12,7 +12,7 @@ A Numpy based scientific computing toolkit that features preprocessing, statisti
 | `rank` | `rank` with tie handling, `percentile` | In progress |
 | `stats` | Descriptive statistics, histogram, quantiles | In progress |
 | `metrics` | Classification metrics, confusion matrix, `mse` | In progress |
-| `pipeline` | `Pipeline` for chaining transformers and models | In progress |
+| `pipeline` | `Pipeline` for chaining transformers and models | Done |
 | `benchmarking` | Performance comparisons | In progress |
 | `utils`, `exceptions` | Shared helpers (`check_array`, `check_is_fitted`) and `NotFittedError` | Done |
 
