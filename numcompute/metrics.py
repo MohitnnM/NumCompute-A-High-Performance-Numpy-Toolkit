@@ -66,7 +66,6 @@ def precision(y_pred, y_true, pred_class=1):
     Space Complexitity:
       O(n) where n is the number of predictions in y_pred and y_true
   """
-  
   pos_index = y_pred == pred_class
   return np.divide(np.sum(y_pred[pos_index] == y_true[pos_index]), y_pred[pos_index].size)
 
@@ -118,7 +117,7 @@ def confusion_matrix(y_pred, y_true, pred_class=1):
       y_true: the true labels in the form of a 1D numpy array
       pred_class: The class to determine to precision of for multiclass classification
     Returns:
-      ndarray or scalar. If inputs are correct it will be a scalar
+      truple of sclars in the order true positive, false positive, true negative, false negative
     Raises:
 
     Time Complexitity:
