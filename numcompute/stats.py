@@ -19,6 +19,7 @@ def mean(data, axis=0):
 
         Parameters:
             data: a numpy array containing the data to calculate the mean of
+            axis: the axis to operate on, defaults to 0
 
         Returns:
             A scalar or an array containing the resulting means
@@ -39,6 +40,8 @@ def median(data,axis):
 
         Parameters:
             data: a numpy array containing the data to calculate the median of
+            axis: the axis to operate on, defaults to 0
+            
 
         Returns:
             A scalar or an array containing the resulting median
@@ -59,6 +62,7 @@ def stan_dev(data,axis):
 
         Parameters:
             data: a numpy array containing the data to calculate the SD of
+            axis: the axis to operate on, defaults to 0
 
         Returns:
             A scalar or an array containing the resulting SD
@@ -79,6 +83,8 @@ def min(data, axis):
 
         Parameters:
             data: a numpy array containing the data to calculate the min of
+            axis: the axis to operate on, defaults to 0
+            
 
         Returns:
             A scalar or an array containing the resulting mins
@@ -99,6 +105,8 @@ def max(data, axis):
 
         Parameters:
             data: a numpy array containing the data to calculate the max of
+            axis: the axis to operate on, defaults to 0
+            
 
         Returns:
             A scalar or an array containing the resulting maxs
@@ -112,3 +120,48 @@ def max(data, axis):
             O(n) where n is the number of elements of the data
     """ 
     return np.max(data, axis)
+
+def histogram(data, bins=10):
+    """
+        Groups the data into the chosen number of bins
+
+        Parameters:
+            data: a numpy array containing the data to calculate the mean of
+            axis: the axis to operate on, defaults to 0
+            
+
+        Returns:
+            array of the values of the histogram
+            bin_edges: the edges of the bin
+
+        Raises:
+        
+        Time Complexity:
+            O(bn) where n is the number of elements of the data and b is the number of bins
+
+        Space Complexity:
+            O(n) where n is the number of elements of the data
+    """
+    return np.histogram(data,bins)
+
+def quantile(data, q):
+    """
+        Groups the data into the probility or sequence of probabilities to compute
+
+        Parameters:
+            data: a numpy array containing the data to calculate the mean of
+            axis: the axis to operate on, defaults to 0
+            
+
+        Returns:
+            Scalar or array of the quantiles
+
+        Raises:
+        
+        Time Complexity:
+            O(bn) where n is the number of elements of the data and b is the number of bins
+
+        Space Complexity:
+            O(n) where n is the number of elements of the data
+    """
+    return np.quantile(data, q)
