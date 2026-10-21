@@ -14,6 +14,7 @@ vectorisation, numerical stability, consistent APIs, and reproducible behaviour.
 from .io import load_csv
 from .optim import grad, jacobian
 from .preprocessing import MinMaxScaler, OneHotEncoder, SimpleImputer, StandardScaler
+from .stats import mean, median, stan_dev, min, max, quantile, histogram
 
 __all__ = [
     "load_csv",
@@ -23,4 +24,11 @@ __all__ = [
     "OneHotEncoder",
     "SimpleImputer",
     "StandardScaler",
+    "mean",
+    "median",
+    "stan_dev",
+    "min",
+    "max",
+    "quantile",
+    "histogram"
 ]
