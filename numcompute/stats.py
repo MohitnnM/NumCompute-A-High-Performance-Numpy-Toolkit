@@ -126,8 +126,8 @@ def histogram(data, bins=10):
         Groups the data into the chosen number of bins
 
         Parameters:
-            data: a numpy array containing the data to calculate the mean of
-            axis: the axis to operate on, defaults to 0
+            data: a numpy array containing the data to group
+            bins: the number of bins to group the data into or an array of the bins
             
 
         Returns:
@@ -150,7 +150,7 @@ def quantile(data, q):
 
         Parameters:
             data: a numpy array containing the data to calculate the mean of
-            axis: the axis to operate on, defaults to 0
+            q: the probability or sequence of probabilites the data will be grouped into
             
 
         Returns:
