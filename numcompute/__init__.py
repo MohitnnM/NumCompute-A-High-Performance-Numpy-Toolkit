@@ -15,6 +15,7 @@ from .io import load_csv
 from .optim import grad, jacobian
 from .preprocessing import MinMaxScaler, OneHotEncoder, SimpleImputer, StandardScaler
 from .stats import mean, median, stan_dev, min, max, quantile, histogram
+from .metrics import accuracy, precision, recall, f1score, confusion_matrix, MSE
 
 __all__ = [
     "load_csv",
@@ -31,4 +32,11 @@ __all__ = [
     "max",
     "quantile",
     "histogram"
+]
+    "accuracy",
+    "precision",
+    "recall",
+    "f1score",
+    "confusion_matrix",
+    "MSE"
 ]
