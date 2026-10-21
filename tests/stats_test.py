@@ -53,5 +53,11 @@ class statsTests(unittest.TestCase):
 
         test_div = quantile(test_data, test_prob)
         self.assertEqual(test_div, actual_div)
+    def test_nan_max(self):
+        test_data = np.array([5,10,20,np.nan,30])
+        actual_max = 30
+
+        test_max = max(test_data)
+        self.assertEqual(test_max, actual_max)
 if __name__ == "__main__":
     unittest.main()

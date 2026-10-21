@@ -32,7 +32,7 @@ def mean(data, axis=0):
         Space Complexity:
             O(n) where n is the number of elements of the data
     """
-    return np.mean(data,axis)
+    return np.nanmean(data,axis)
 
 def median(data,axis=0):
     """
@@ -54,7 +54,7 @@ def median(data,axis=0):
         Space Complexity:
             O(n) where n is the number of elements of the data
     """  
-    return np.median(data,axis)
+    return np.nanmedian(data,axis)
 
 def stan_dev(data,axis=0):
     """
@@ -75,7 +75,7 @@ def stan_dev(data,axis=0):
         Space Complexity:
             O(n) where n is the number of elements of the data
     """ 
-    return np.std(data,axis)
+    return np.nanstd(data,axis)
 
 def min(data, axis=0):
     """
@@ -97,7 +97,7 @@ def min(data, axis=0):
         Space Complexity:
             O(n) where n is the number of elements of the data
     """ 
-    return np.min(data,axis)
+    return np.nanmin(data,axis)
 
 def max(data, axis=0):
     """
@@ -119,7 +119,7 @@ def max(data, axis=0):
         Space Complexity:
             O(n) where n is the number of elements of the data
     """ 
-    return np.max(data, axis)
+    return np.nanmax(data, axis)
 
 def histogram(data, bins=10):
     """
@@ -142,7 +142,7 @@ def histogram(data, bins=10):
         Space Complexity:
             O(n) where n is the number of elements of the data
     """
-    return np.histogram(data,bins)
+    return np.histogram(data[~np.isnan(data)],bins)
 
 def quantile(data, q):
     """
@@ -164,4 +164,4 @@ def quantile(data, q):
         Space Complexity:
             O(n) where n is the number of elements of the data
     """
-    return np.quantile(data, q)
+    return np.nanquantile(data, q)
