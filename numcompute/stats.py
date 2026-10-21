@@ -34,7 +34,7 @@ def mean(data, axis=0):
     """
     return np.mean(data,axis)
 
-def median(data,axis):
+def median(data,axis=0):
     """
         Calculates the stastical median for the inputed data
 
@@ -56,7 +56,7 @@ def median(data,axis):
     """  
     return np.median(data,axis)
 
-def stan_dev(data,axis):
+def stan_dev(data,axis=0):
     """
         Calculates the stastical standard deviation for the inputed data
 
@@ -77,7 +77,7 @@ def stan_dev(data,axis):
     """ 
     return np.std(data,axis)
 
-def min(data, axis):
+def min(data, axis=0):
     """
         Calculates the min for the inputed data
 
@@ -99,7 +99,7 @@ def min(data, axis):
     """ 
     return np.min(data,axis)
 
-def max(data, axis):
+def max(data, axis=0):
     """
         Calculates the stastical max for the inputed data
 
