@@ -9,9 +9,9 @@ A Numpy based scientific computing toolkit that features preprocessing, statisti
 | `preprocessing` | `StandardScaler`, `MinMaxScaler`, `OneHotEncoder`, `SimpleImputer` | Done |
 | `optim` | `grad` and `jacobian` by finite differences (forward or central) | Done |
 | `sort_search` | Stable and multi-key sort, `topk`, quickselect, `binary_search` | Done |
-| `rank` | `rank` with tie handling, `percentile` | In progress |
-| `stats` | Descriptive statistics, histogram, quantiles | In progress |
-| `metrics` | Classification metrics, confusion matrix, `mse` | In progress |
+| `rank` | `rank` with tie handling, `percentile` | Done |
+| `stats` | Descriptive statistics, histogram, quantiles | Done |
+| `metrics` | Classification metrics, confusion matrix, `mse` | Done |
 | `pipeline` | `Pipeline` for chaining transformers and models | Done |
 | `benchmarking` | Performance comparisons | In progress |
 | `utils`, `exceptions` | Shared helpers (`check_array`, `check_is_fitted`) and `NotFittedError` | Done |
