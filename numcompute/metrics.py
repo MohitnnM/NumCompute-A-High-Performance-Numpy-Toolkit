@@ -38,8 +38,6 @@ def accuracy(y_pred, y_true):
       y_true: the true labels in the form of a 1D numpy array
     Returns:
       ndarray or scalar. If inputs are correct it will be a scalar
-    Raises:
-
     Time Complexitity:
       O(n) where n is the number of predictions in y_pred and y_true
     Space Complexitity:
@@ -47,6 +45,14 @@ def accuracy(y_pred, y_true):
 
 
   """
+  y_pred_mask = ~np.isnan(y_pred)
+  y_pred = y_pred[y_pred_mask]
+  y_true = y_true[y_pred_mask]
+  y_true_mask = ~np.isnan(y_true)
+  y_pred = y_pred[y_true_mask]
+  y_true = y_true[y_true_mask]
+  
+  
   return np.divide(np.sum(np.where(y_pred ==y_true,1,0)),y_true.size)
 
 def precision(y_pred, y_true, pred_class=1):
@@ -58,14 +64,17 @@ def precision(y_pred, y_true, pred_class=1):
       pred_class: The class to determine to precision of for multiclass classification
     Returns:
       ndarray or scalar. If inputs are correct it will be a scalar
-    Raises:
-      Type Error: if y_pred and y_true aren't 1D numpy arrays of dtype int
-      Value Error: if y_pred and y_true are different lengths
     Time Complexitity:
       O(n) where n is the number of predictions in y_pred and y_true
     Space Complexitity:
       O(n) where n is the number of predictions in y_pred and y_true
   """
+  y_pred_mask = ~np.isnan(y_pred)
+  y_pred = y_pred[y_pred_mask]
+  y_true = y_true[y_pred_mask]
+  y_true_mask = ~np.isnan(y_true)
+  y_pred = y_pred[y_true_mask]
+  y_true = y_true[y_true_mask]
   pos_index = y_pred == pred_class
   return np.divide(np.sum(y_pred[pos_index] == y_true[pos_index]), y_pred[pos_index].size)
 
@@ -85,6 +94,12 @@ def recall(y_pred, y_true, pred_class=1):
     Space Complexitity:
       O(n) where n is the number of predictions in y_pred and y_true
   """
+  y_pred_mask = ~np.isnan(y_pred)
+  y_pred = y_pred[y_pred_mask]
+  y_true = y_true[y_pred_mask]
+  y_true_mask = ~np.isnan(y_true)
+  y_pred = y_pred[y_true_mask]
+  y_true = y_true[y_true_mask]
   pos_index = y_true == pred_class
   return np.divide(np.sum(y_pred[pos_index] == y_true[pos_index]), y_true[pos_index].size)
 
@@ -105,6 +120,12 @@ def f1score(y_pred, y_true, pred_class=1):
     Space Complexitity:
       O(n) where n is the number of predictions in y_pred and y_true
   """
+  y_pred_mask = ~np.isnan(y_pred)
+  y_pred = y_pred[y_pred_mask]
+  y_true = y_true[y_pred_mask]
+  y_true_mask = ~np.isnan(y_true)
+  y_pred = y_pred[y_true_mask]
+  y_true = y_true[y_true_mask]
   prec = precision(y_pred,y_true,pred_class)
   reca = recall(y_pred,y_true,pred_class)
   return 2* ((prec*reca)/(prec+reca))
@@ -125,6 +146,12 @@ def confusion_matrix(y_pred, y_true, pred_class=1):
     Space Complexitity:
       O(n) where n is the number of predictions in y_pred and y_true
   """
+  y_pred_mask = ~np.isnan(y_pred)
+  y_pred = y_pred[y_pred_mask]
+  y_true = y_true[y_pred_mask]
+  y_true_mask = ~np.isnan(y_true)
+  y_pred = y_pred[y_true_mask]
+  y_true = y_true[y_true_mask]
   pred_pos = y_pred == pred_class
   pred_neg = y_pred != pred_class
   true_pos = np.count_nonzero(y_pred[pred_pos] == y_true[pred_pos])
@@ -150,4 +177,10 @@ def MSE(y_pred, y_true):
     Space Complexitity:
       O(n) where n is the number of predictions in y_pred and y_true
   """
+  y_pred_mask = ~np.isnan(y_pred)
+  y_pred = y_pred[y_pred_mask]
+  y_true = y_true[y_pred_mask]
+  y_true_mask = ~np.isnan(y_true)
+  y_pred = y_pred[y_true_mask]
+  y_true = y_true[y_true_mask]
   return np.divide(np.sum(np.power(y_pred-y_true,2)),y_true.size)

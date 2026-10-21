@@ -54,6 +54,38 @@ class TestMetrics(unittest.TestCase):
         calc_mse = MSE(pred_array,true_array)
 
         self.assertEqual(calc_mse,actual_mse)
+    def test_nan_MSE(self):
+        pred_array = np.array([2,np.nan,1,1,0.5,0])
+        true_array = np.array([1,1,np.nan,0.5,1,0])
+        actual_mse = 0.375
+
+        calc_mse = MSE(pred_array,true_array)
+
+        self.assertEqual(calc_mse,actual_mse)
+    def test_nan_prec(self):
+        pred_array = np.array([1,np.nan,1,1,0,0])
+        true_array = np.array([1,1,np.nan,0,0,0])
+        actual_precision = 0.5
+
+        calc_precision = precision(pred_array, true_array)
+
+        self.assertEqual(calc_precision,actual_precision)
+    def test_nan_con_mat(self):
+        pred_array = np.array([1,np.nan,1,1,0,0])
+        true_array = np.array([1,1,np.nan,0,0,0])
+        actual_matrix = (1,1,2,0)
+
+        calc_matrix = confusion_matrix(pred_array, true_array)
+
+        self.assertEqual(calc_matrix, actual_matrix)
+    def test_nan_f1(self):
+        pred_array = np.array([1,np.nan,1,0,0])
+        true_array = np.array([1,1,0,0,0])
+        actual_f1score = 2/3
+
+        calc_f1score = f1score(pred_array, true_array)
+
+        self.assertEqual(calc_f1score,actual_f1score)
 if __name__ == "__main__":
     unittest.main()
 
