@@ -12,19 +12,69 @@ vectorisation, numerical stability, consistent APIs, and reproducible behaviour.
 """
 
 from .io import load_csv
+
 from .optim import grad, jacobian
-from .preprocessing import MinMaxScaler, OneHotEncoder, SimpleImputer, StandardScaler
-from .stats import mean, median, stan_dev, min, max, quantile, histogram
-from .metrics import accuracy, precision, recall, f1score, confusion_matrix, MSE
+
+from .preprocessing import (
+    MinMaxScaler, 
+    OneHotEncoder, 
+    SimpleImputer, 
+    StandardScaler,
+)
+from .sort_search import (
+    stable_sort,
+    multi_key_sort,
+    topk,
+    quickselect,
+    binary_search,
+)
+
+from .rank import (
+    rank,
+    percentile,
+)
+
+from .stats import (
+    mean, 
+    median, 
+    stan_dev, 
+    min,
+    max, 
+    quantile, 
+    histogram,
+)
+
+from .metrics import (
+    accuracy, 
+    precision, 
+    recall, 
+    f1score, 
+    confusion_matrix, 
+    MSE,
+)
+
+from .pipeline import Pipeline
 
 __all__ = [
     "load_csv",
+
     "grad",
     "jacobian",
+
     "MinMaxScaler",
     "OneHotEncoder",
     "SimpleImputer",
     "StandardScaler",
+
+    "stable_sort",
+    "multi_key_sort"
+    "topk",
+    "quickselect",
+    "binary_search",
+
+    "rank",
+    "percentile",
+
     "mean",
     "median",
     "stan_dev",
@@ -32,11 +82,14 @@ __all__ = [
     "max",
     "quantile",
     "histogram"
-]
+
     "accuracy",
     "precision",
     "recall",
     "f1score",
     "confusion_matrix",
-    "MSE"
+    "MSE",
+
+    "Pipeline",
+
 ]
