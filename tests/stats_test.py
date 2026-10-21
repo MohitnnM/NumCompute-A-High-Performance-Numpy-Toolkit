@@ -59,5 +59,20 @@ class statsTests(unittest.TestCase):
 
         test_max = max(test_data)
         self.assertEqual(test_max, actual_max)
+    def test_nan_quan(self):
+        test_data = np.array([0,1,2,3, np.nan])
+        test_prob = 0.5
+        actual_div = 1.5
+        
+        test_div = quantile(test_data, test_prob)
+        self.assertEqual(test_div, actual_div)
+    def test_nan_hist(self):
+        test_data = np.array([0,1,2,3, np.nan])
+        test_bins = 4
+        actual_hist = (np.array([1,1,1,1]),np.array([0, 0.75, 1.5, 2.25, 3]))
+
+        test_hist = histogram(test_data, test_bins)
+        np.testing.assert_array_equal(actual_hist[0],test_hist[0])
+        np.testing.assert_array_equal(actual_hist[1], test_hist[1])
 if __name__ == "__main__":
     unittest.main()
