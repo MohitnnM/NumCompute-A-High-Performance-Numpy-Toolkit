@@ -91,7 +91,6 @@ def rank(data, method="average"):
         case "dense":
             _, inverse = np.unique(values, return_inverse=True)
             ranks[is_present] = inverse + 1
-
     return ranks
 
 
@@ -170,3 +169,6 @@ def percentile(data, q, interpolation="linear"):
             result = (a + b) / 2
 
     return float(result)
+
+arr = np.array([0, 2, 3, 2, 7, 2])
+rank(arr)
