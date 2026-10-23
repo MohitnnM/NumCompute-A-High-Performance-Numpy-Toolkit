@@ -91,6 +91,7 @@ def rank(data, method="average"):
         case "dense":
             _, inverse = np.unique(values, return_inverse=True)
             ranks[is_present] = inverse + 1
+            
     return ranks
 
 
