@@ -88,7 +88,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
     gc.disable() # Eliminates a potential source of benchmarking variation
                  # by disabling Python garbage collector.
  
-    repeat_benches = np.zeros(repeat);  # Initialise array to store repeated benchmark timings.
+    vectorized_benches = np.empty(repeat);  # Initialise array to store repeated benchmark timings.
 
     if mode not in MODES: # Validating inputted mode
         raise ValueError(
@@ -103,7 +103,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
                 f"Unknown demo function '{mode}'. Please select from {DEMO_FUNCS}."
                 )
            
-            pyloop_benches = np.copy(repeat_benches) # Creates array to store Python loop implementation benches.
+            pyloop_benches = np.copy(vectorized_benches) # Creates array to store Python loop implementation benches.
 
             match func:
 
@@ -124,13 +124,14 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                         end_time = perf_counter()   # end time
 
-                        repeat_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
+                        vectorized_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
 
 
                         ## Python Loop
+                        test_arr_loop = test_arr.copy()
                         start_time = perf_counter() # Start time, uses a high precision, non-adjustable clock for benchmarking. 
 
-                        test_arr.sort() # Calling the function
+                        test_arr_loop.sort() # Calling the function
 
                         end_time = perf_counter()   # end time
 
@@ -172,7 +173,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                         end_time = perf_counter()   # end time
 
-                        repeat_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
+                        vectorized_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
 
 
                         ## Python Loop
@@ -200,7 +201,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                         end_time = perf_counter()   # end time
 
-                        repeat_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
+                        vectorized_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
 
 
                         ## Python Loop
@@ -228,7 +229,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                         end_time = perf_counter()   # end time
 
-                        repeat_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
+                        vectorized_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
 
 
                         ## Python Loop
@@ -265,7 +266,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                         end_time = perf_counter()   # end time
 
-                        repeat_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
+                        vectorized_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
 
 
                         ## Python Loop
@@ -279,20 +280,20 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                         pyloop_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places  
 
+            # Performance table
+            print(f'Table of performance:\n')
+            print(f'Pyloop implementation:\n{pyloop_benches}\nVectorization implementation:\n{vectorized_benches}')
+
             # Print results of comparisons
             print(f'\nAverage python loop implementation execution time: {np.average(pyloop_benches):.6f} ms') # Mean execution time for python loops
-            print(f'Average vectorization execution time: {np.average(repeat_benches):.6f} ms') # Mean execution time
+            print(f'Average vectorization execution time: {np.average(vectorized_benches):.6f} ms') # Mean execution time
 
-            perf_percentage = (np.average(pyloop_benches) - np.average(repeat_benches)) / np.average(repeat_benches) * 100 # Calculates average performance difference from loop to vectorization
+            perf_percentage = (np.average(pyloop_benches) - np.average(vectorized_benches)) / np.average(vectorized_benches) * 100 # Calculates average performance difference from loop to vectorization
 
             if(perf_percentage < 0):
                  print(f'\nVectorization performance impact is {perf_percentage:.4f}% slow down')
             else:
                  print(f'\nVectorization performance impact is {perf_percentage:.4f}% speed up')
-
-
-            
-            
 
         case 'standard':
 
@@ -304,10 +305,9 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                 end_time = perf_counter()   # end time
 
-                repeat_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
+                vectorized_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
             
-         print(f'Milisecond execution results for {repeat} repeats (in ms):\n', repeat_benches) 
+         print(f'Milisecond execution results for {repeat} repeats (in ms):\n', vectorized_benches) 
 
-         print(f'\nAverage execution time: {np.average(repeat_benches):.6f} ms') # Mean execution time
+         print(f'\nAverage execution time: {np.average(vectorized_benches):.6f} ms') # Mean execution time
  
-benchit('imputer',mode='demo', repeat=1000)
