@@ -15,7 +15,7 @@ Follows the benchmarking philosophies on:
 
 """
 import gc
-from time import perf_counter
+from time import perf_counter, time
 
 import numpy as np
 
@@ -88,7 +88,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
     gc.disable() # Eliminates a potential source of benchmarking variation
                  # by disabling Python garbage collector.
  
-    vectorized_benches = np.empty(repeat);  # Initialise array to store repeated benchmark timings.
+    vectorized_benches = np.zeros(repeat);  # Initialise array to store repeated benchmark timings.
 
     if mode not in MODES: # Validating inputted mode
         raise ValueError(
@@ -243,8 +243,8 @@ def benchit(func, *args, repeat=5, mode='standard'):
                     
                 case 'imputer':
                     #Test inputs
-                    test_arr = np.full((5,5), np.nan)
-                    test_pyloop_verify = test_arr
+                    test_arr_verify = np.full((5,5), np.nan)
+                    test_pyloop_verify = test_arr_verify
 
                     for i in range(len(test_pyloop_verify)):
                         for j in range(len(test_pyloop_verify[i])):
@@ -252,12 +252,13 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                     # Verification Step (e.g both vectorized and Python loop functions produce same output)
                     print("\nComparing imputer, vectorized vs python loop functions..")
-                    np.testing.assert_array_equal(numcompute.SimpleImputer(fill_value=-1).fit_transform(test_arr), test_pyloop_verify )
+                    np.testing.assert_array_equal(numcompute.SimpleImputer(fill_value=-1).fit_transform(test_arr_verify), test_pyloop_verify )
 
+                    #Refresh inputs
+                    test_arr = np.full((5,5), np.nan)
+                    test_pyloop = test_arr
                     for r in range(repeat): 
-                        # Refresh test inputs
-                        test_arr = np.full((5,5), np.nan)
-                        test_pyloop = test_arr
+
 
                         ## VECTORISED
                         start_time = perf_counter() # Start time, uses a high precision, non-adjustable clock for benchmarking. 
@@ -266,7 +267,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                         end_time = perf_counter()   # end time
 
-                        vectorized_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
+                        vectorized_benches[i] = round((end_time - start_time)* 1000, 6)  # Add result to the array and round to 6 decimal places
 
 
                         ## Python Loop
@@ -275,10 +276,9 @@ def benchit(func, *args, repeat=5, mode='standard'):
                         for i in range(len(test_pyloop)):
                             for j in range(len(test_pyloop[i])):
                                 test_pyloop[i][j] = -1   # Performing transform with a loop
-
                         end_time = perf_counter()   # end time
 
-                        pyloop_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places  
+                        pyloop_benches[i] = round((end_time - start_time)* 1000, 6)   # Add result to the array and round to 6 decimal places  
 
             # Performance table
             print(f'Table of performance (in ms):\n')
@@ -311,3 +311,4 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
             print(f'\nAverage execution time: {np.average(vectorized_benches):.6f} ms') # Mean execution time
  
+benchit('imputer',mode='demo', repeat=1000)
