@@ -329,7 +329,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
             if(perf_percentage > 0):
                  print(f'\nVectorization performance impact is {perf_percentage:.4f}% slow down')
             else:
-                 print(f'\nVectorization performance impact is {perf_percentage:.4f}% speed up')
+                 print(f'\nVectorization performance impact is {abs(perf_percentage):.4f}% speed up')
 
         case 'standard':
 
