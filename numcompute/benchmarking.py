@@ -327,9 +327,9 @@ def benchit(func, *args, repeat=5, mode='standard'):
             perf_percentage = (vectorized_avg_time - pyloop_avg_time) / pyloop_avg_time * 100
 
             if(perf_percentage > 0):
-                 print(f'\nVectorization performance impact is %{perf_percentage:.4f} slow down')
+                 print(f'\nVectorization performance impact is {perf_percentage:.4f}% slow down')
             else:
-                 print(f'\nVectorization performance impact is %{abs(perf_percentage):.4f} speed up')
+                 print(f'\nVectorization performance impact is {abs(perf_percentage):.4f}% speed up')
 
         case 'standard':
 
