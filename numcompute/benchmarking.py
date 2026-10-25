@@ -320,10 +320,13 @@ def benchit(func, *args, repeat=5, mode='standard'):
             print(f'\nAverage python loop implementation execution time: {np.average(pyloop_benches):.6f} ms') # Mean execution time for python loops
             print(f'Average vectorization execution time: {np.average(vectorized_benches):.6f} ms') # Mean execution time
 
-            perf_percentage = ((np.average(pyloop_benches) - np.average(vectorized_benches)) / 
-                                abs(np.average(pyloop_benches)) )* 100 # Calculates average performance difference from loop to vectorization
+            pyloop_avg_time = np.average(pyloop_benches)
+            vectorized_avg_time = np.average(vectorized_benches)
 
-            if(perf_percentage < 0):
+            # Calculates average performance difference from loop to vectorization
+            perf_percentage = (vectorized_avg_time - pyloop_avg_time) / pyloop_avg_time * 100
+
+            if(perf_percentage > 0):
                  print(f'\nVectorization performance impact is {perf_percentage:.4f}% slow down')
             else:
                  print(f'\nVectorization performance impact is {perf_percentage:.4f}% speed up')
