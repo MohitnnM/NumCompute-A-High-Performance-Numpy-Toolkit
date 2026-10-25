@@ -347,4 +347,3 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
             print(f'\nAverage execution time: {np.average(vectorized_benches):.6f} ms') # Mean execution time
  
-benchit('stable_sort',mode='demo', repeat=1000)
