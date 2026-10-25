@@ -108,15 +108,19 @@ def benchit(func, *args, repeat=5, mode='standard'):
             match func:
 
                 case 'stable_sort':
-                    test_arr = [random.randint(1, 50) for _ in range(100)] # Testing input
-                    test_arr_sort = sorted(test_arr) # Final output from loop sort (used for verifying)
+                    test_arr_verify = [random.randint(1, 50) for _ in range(100)] # Testing input
+                    test_arr_sort_verify = sorted(test_arr_verify) # Final output from loop sort (used for verifying)
 
                     # Verification Step (e.g both vectorized and Python loop functions produce same output)
                     print("\nComparing numcompute stable sort...")
-                    np.testing.assert_array_equal(numcompute.stable_sort(test_arr), test_arr_sort)
+                    np.testing.assert_array_equal(numcompute.stable_sort(test_arr_verify), test_arr_sort_verify)
                     
                     # Filling vectorization bench results
                     for i in range(repeat): 
+                        #Refresh inputs
+                        test_arr = [random.randint(1, 50) for _ in range(100)]
+                        test_arr_loop = test_arr.copy()
+                        
                         ## VECTORISED
                         start_time = perf_counter() # Start time, uses a high precision, non-adjustable clock for benchmarking. 
 
@@ -128,7 +132,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
 
                         ## Python Loop
-                        test_arr_loop = test_arr.copy()
+                        
                         start_time = perf_counter() # Start time, uses a high precision, non-adjustable clock for benchmarking. 
 
                         test_arr_loop.sort() # Calling the function
@@ -140,7 +144,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
                 case 'multi_key_sort':
 
                     #Test inputs
-                    test_arr = np.array([
+                    test_arr_verify = np.array([
                         [1, 2, 3],
                         [1, 2, 4],
                         [1, 3, 5],
@@ -150,7 +154,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
                         [2, 2, 5]
                     ])
 
-                    test_grid = [
+                    test_grid_verify = [
                         [1, 2, 3],
                         [1, 2, 4],
                         [1, 3, 5],
@@ -162,10 +166,32 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                     # Verification Step (e.g both vectorized and Python loop functions produce same output)
                     print("\nComparing multi key sort..")
-                    np.testing.assert_array_equal(numcompute.multi_key_sort(test_arr,[0, 1, 2]), sorted(test_grid, key= lambda x: (x[0], x[1], x[2])))
+                    np.testing.assert_array_equal(numcompute.multi_key_sort(test_arr_verify,[0, 1, 2]), sorted(test_grid_verify, key= lambda x: (x[0], x[1], x[2])))
 
                     # Filling vectorization bench results
                     for i in range(repeat): 
+
+                        #Refresh inputs
+                        test_arr = np.array([
+                        [1, 2, 3],
+                        [1, 2, 4],
+                        [1, 3, 5],
+                        [1, 1, 2],
+                        [2, 2, 1],
+                        [2, 1, 1], 
+                        [2, 2, 5]
+                        ])
+
+                        test_grid = [
+                        [1, 2, 3],
+                        [1, 2, 4],
+                        [1, 3, 5],
+                        [1, 1, 2],
+                        [2, 2, 1],
+                        [2, 1, 1], 
+                        [2, 2, 5]
+                        ]
+
                         ## VECTORISED
                         start_time = perf_counter() # Start time, uses a high precision, non-adjustable clock for benchmarking. 
 
@@ -187,13 +213,16 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                 case 'median':
                     #Test inputs
-                    test_arr = [random.randint(1, 50) for _ in range(100)]
+                    test_arr_verify = [random.randint(1, 50) for _ in range(100)]
 
                     # Verification Step (e.g both vectorized and Python loop functions produce same output)
                     print("\nComparing median, vectorized vs python loop functions..")
-                    np.testing.assert_allclose(numcompute.median(test_arr), statistics.median(test_arr))
+                    np.testing.assert_allclose(numcompute.median(test_arr_verify), statistics.median(test_arr_verify))
 
                     for i in range(repeat): 
+                        #Refresh inputs
+                        test_arr = [random.randint(1, 50) for _ in range(100)]
+
                         ## VECTORISED
                         start_time = perf_counter() # Start time, uses a high precision, non-adjustable clock for benchmarking. 
 
@@ -215,13 +244,16 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                 case 'stan_dev':
                     #Test inputs
-                    test_arr = [random.randint(1, 50) for _ in range(100)]
+                    test_arr_verify = [random.randint(1, 50) for _ in range(100)]
 
                     # Verification Step (e.g both vectorized and Python loop functions produce same output)
                     print("\nComparing standard deviation, vectorized vs python loop functions..")
-                    np.testing.assert_allclose(numcompute.stan_dev(test_arr), statistics.pstdev(test_arr))
+                    np.testing.assert_allclose(numcompute.stan_dev(test_arr_verify), statistics.pstdev(test_arr_verify))
 
                     for i in range(repeat): 
+                        #Refresh inputs
+                        test_arr = [random.randint(1, 50) for _ in range(100)]
+
                         ## VECTORISED
                         start_time = perf_counter() # Start time, uses a high precision, non-adjustable clock for benchmarking. 
 
@@ -254,11 +286,11 @@ def benchit(func, *args, repeat=5, mode='standard'):
                     print("\nComparing imputer, vectorized vs python loop functions..")
                     np.testing.assert_array_equal(numcompute.SimpleImputer(fill_value=-1).fit_transform(test_arr_verify), test_pyloop_verify )
 
-                    #Refresh inputs
-                    test_arr = np.full((5,5), np.nan)
-                    test_pyloop = test_arr
-                    for r in range(repeat): 
 
+                    for r in range(repeat): 
+                        #Refresh inputs
+                        test_arr = np.full((5,5), np.nan)
+                        test_pyloop = test_arr
 
                         ## VECTORISED
                         start_time = perf_counter() # Start time, uses a high precision, non-adjustable clock for benchmarking. 
