@@ -120,7 +120,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
                         #Refresh inputs
                         test_arr = [random.randint(1, 50) for _ in range(100)]
                         test_arr_loop = test_arr.copy()
-                        
+
                         ## VECTORISED
                         start_time = perf_counter() # Start time, uses a high precision, non-adjustable clock for benchmarking. 
 
@@ -320,7 +320,8 @@ def benchit(func, *args, repeat=5, mode='standard'):
             print(f'\nAverage python loop implementation execution time: {np.average(pyloop_benches):.6f} ms') # Mean execution time for python loops
             print(f'Average vectorization execution time: {np.average(vectorized_benches):.6f} ms') # Mean execution time
 
-            perf_percentage = (np.average(pyloop_benches) - np.average(vectorized_benches)) / np.average(vectorized_benches) * 100 # Calculates average performance difference from loop to vectorization
+            perf_percentage = ((np.average(pyloop_benches) - np.average(vectorized_benches)) / 
+                                abs(np.average(pyloop_benches)) )* 100 # Calculates average performance difference from loop to vectorization
 
             if(perf_percentage < 0):
                  print(f'\nVectorization performance impact is {perf_percentage:.4f}% slow down')
@@ -343,4 +344,4 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
             print(f'\nAverage execution time: {np.average(vectorized_benches):.6f} ms') # Mean execution time
  
-benchit('imputer',mode='demo', repeat=1000)
+benchit('stable_sort',mode='demo', repeat=1000)
