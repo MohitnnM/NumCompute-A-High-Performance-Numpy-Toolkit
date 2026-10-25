@@ -307,12 +307,7 @@ def benchit(func, *args, repeat=5, mode='standard'):
 
                 vectorized_benches[i] = round((end_time - start_time)*1000, 6) # Add result to the array and round to 6 decimal places
             
-            print(f'Milisecond execution results for {repeat} repeats (in ms):\n', vectorized_benches) 
+            print(f'\nMilisecond execution results for {repeat} repeats (in ms):\n', vectorized_benches) 
 
             print(f'\nAverage execution time: {np.average(vectorized_benches):.6f} ms') # Mean execution time
-
-            # Performance table
-            print(f'Table of performance (in ms):\n{vectorized_benches}')
  
-
-
