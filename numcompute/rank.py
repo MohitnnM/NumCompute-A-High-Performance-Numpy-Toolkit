@@ -170,6 +170,3 @@ def percentile(data, q, interpolation="linear"):
             result = (a + b) / 2
 
     return float(result)
-
-arr = np.array([0, 2, 3, 2, 7, 2])
-rank(arr)
