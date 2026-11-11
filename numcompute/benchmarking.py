@@ -742,7 +742,7 @@ def benchmark_buffer_sizes(X, y, buffer_sizes, size_of_chunk=50, repeat=3, max_d
         print(f"Average training time: {avg_time:.6f} ms")
 
         if accuracy is not None:
-            print(f"Finaly Accuracy: {accuracy:.4f}")
+            print(f"Final Accuracy: {accuracy:.4f}")
         else:
             print("Buffer did not trigger retraining, no final accuracy.")
 
