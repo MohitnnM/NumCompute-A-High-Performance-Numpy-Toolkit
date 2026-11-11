@@ -8,8 +8,8 @@ without pulling in helper functions or causing circular imports.
 
 class NotFittedError(ValueError, AttributeError):
     """
-        Raised when transform or predict is called before fit.
+    Raised when transform or predict is called before fit.
 
-        Inherits from ValueError and AttributeError, so code that catches
-        either built-in exception will still catch this one.
+    Inherits from ValueError and AttributeError, so code that catches
+    either built-in exception will still catch this one.
     """

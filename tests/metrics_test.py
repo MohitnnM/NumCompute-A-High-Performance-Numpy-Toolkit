@@ -1,92 +1,190 @@
 """
-    Unit tests for metrics.py module
+Unit tests for metrics.py module
 """
-import unittest
-import numpy as np
-from numcompute.metrics import accuracy, precision, recall, f1score, confusion_matrix, MSE
 
-class TestMetrics(unittest.TestCase):
+import unittest
+
+import numpy as np
+
+from numcompute.metrics import (
+    AUC,
+    F1,
+    MSE,
+    Accuracy,
+    ConfusionMatrix,
+    Precision,
+    Recall,
+    RollingWindowMetric,
+)
+
+
+class TestAccuracy(unittest.TestCase):
     def test_correct_accuracy(self):
-        pred_array = np.array([1,1,0,0])
-        true_array = np.array([1,0,0,0])
+        pred_array = np.array([1, 1, 0, 0])
+        true_array = np.array([1, 0, 0, 0])
         actual_accuracy = 0.75
 
-        calc_accuracy = accuracy(pred_array, true_array)
+        metric = Accuracy()
+        metric.update(true_array, pred_array)
 
-        self.assertEqual(calc_accuracy, actual_accuracy)
+        self.assertEqual(metric.result(), actual_accuracy)
+
+    def test_accuracy_across_chunks(self):
+        metric = Accuracy()
+        metric.update(np.array([1, 0]), np.array([1, 1]))
+        metric.update(np.array([0, 0]), np.array([0, 0]))
+        actual_accuracy = 0.75
+
+        self.assertEqual(metric.result(), actual_accuracy)
+
+    def test_accuracy_reset(self):
+        metric = Accuracy()
+
+        metric.update(np.array([1, 0]), np.array([1, 1]))
+
+        metric.reset()
+
+        self.assertEqual(metric.result(), 0.0)
+
+    def test_accuracy_ignores_nan_pairs(self):
+        pred_array = np.array([1, 1, np.nan, 0])
+        true_array = np.array([1, np.nan, 0, 0])
+
+        metric = Accuracy()
+        metric.update(true_array, pred_array)
+
+        self.assertEqual(metric.result(), 1.0)
+
+
+class TestbinaryMetrics(unittest.TestCase):
+    def setUp(self):
+        self.pred_array = np.array([1, 1, 0, 0])
+        self.true_array = np.array([1, 0, 0, 0])
+
     def test_correct_precision(self):
-        pred_array = np.array([1,1,0,0])
-        true_array = np.array([1,0,0,0])
+        metric = Precision()
+        metric.update(self.true_array, self.pred_array)
+
         actual_precision = 0.5
 
-        calc_precision = precision(pred_array, true_array)
+        self.assertEqual(metric.result(), actual_precision)
 
-        self.assertEqual(calc_precision,actual_precision)
     def test_correct_recall(self):
-        pred_array = np.array([1,1,0,0])
-        true_array = np.array([1,0,0,0])
-        actual_recall = 1
+        metric = Recall()
+        metric.update(self.true_array, self.pred_array)
 
-        calc_recall = recall(pred_array, true_array)
+        actual_recall = 1.0
 
-        self.assertEqual(calc_recall,actual_recall)
-    def test_correct_f1score(self):
-        pred_array = np.array([1,1,0,0])
-        true_array = np.array([1,0,0,0])
-        actual_f1score = 2/3
+        self.assertEqual(metric.result(), actual_recall)
 
-        calc_f1score = f1score(pred_array, true_array)
+    def test_correct_f1(self):
+        metric = F1()
+        metric.update(self.true_array, self.pred_array)
 
-        self.assertEqual(calc_f1score,actual_f1score)
+        actual_f1 = 2 / 3
+
+        self.assertEqual(metric.result(), actual_f1)
+    
+    def test_f1_all_predictions_wrong(self):
+        metric = F1()
+        metric.update(np.array([1, 1, 0, 0]), np.array([0, 0, 1, 1]))
+
+        self.assertEqual(metric.result(), 0.0)
+
     def test_correct_confusion_matrix(self):
-        pred_array = np.array([1,1,0,0])
-        true_array = np.array([1,0,0,0])
-        actual_matrix = (1,1,2,0)
+        metric = ConfusionMatrix()
+        metric.update(self.true_array, self.pred_array)
 
-        calc_matrix = confusion_matrix(pred_array, true_array)
+        actual_matrix = (1, 1, 2, 0)
 
-        self.assertEqual(calc_matrix, actual_matrix)
-    def test_corect_MSE(self):
-        pred_array = np.array([2,1,0.5,0])
-        true_array = np.array([1,0.5,1,0])
+        self.assertEqual(metric.result(), actual_matrix)
+
+    def test_binary_metric_across_chunks(self):
+        metric = Precision()
+
+        metric.update(np.array([1, 0]), np.array([1, 1]))
+        metric.update(np.array([1, 0]), np.array([1, 0]))
+
+        # TP = 2, FP = 1
+        self.assertAlmostEqual(metric.result(), 2 / 3)
+
+
+class TestMSE(unittest.TestCase):
+    def test_corect_mse(self):
+        pred_array = np.array([2, 1, 0.5, 0])
+        true_array = np.array([1, 0.5, 1, 0])
         actual_mse = 0.375
 
-        calc_mse = MSE(pred_array,true_array)
+        metric = MSE()
+        metric.update(true_array, pred_array)
 
-        self.assertEqual(calc_mse,actual_mse)
-    def test_nan_MSE(self):
-        pred_array = np.array([2,np.nan,1,1,0.5,0])
-        true_array = np.array([1,1,np.nan,0.5,1,0])
+        self.assertEqual(metric.result(), actual_mse)
+
+    def test_nan_mse(self):
+        pred_array = np.array([2, np.nan, 1, 1, 0.5, 0])
+        true_array = np.array([1, 1, np.nan, 0.5, 1, 0])
+
         actual_mse = 0.375
 
-        calc_mse = MSE(pred_array,true_array)
+        metric = MSE()
+        metric.update(true_array, pred_array)
 
-        self.assertEqual(calc_mse,actual_mse)
-    def test_nan_prec(self):
-        pred_array = np.array([1,np.nan,1,1,0,0])
-        true_array = np.array([1,1,np.nan,0,0,0])
-        actual_precision = 0.5
+        self.assertEqual(metric.result(), actual_mse)
 
-        calc_precision = precision(pred_array, true_array)
+    def test_mse_across_chunks(self):
+        metric = MSE()
 
-        self.assertEqual(calc_precision,actual_precision)
-    def test_nan_con_mat(self):
-        pred_array = np.array([1,np.nan,1,1,0,0])
-        true_array = np.array([1,1,np.nan,0,0,0])
-        actual_matrix = (1,1,2,0)
+        metric.update(np.array([1.0, 2.0]), np.array([1.0, 3.0]))
 
-        calc_matrix = confusion_matrix(pred_array, true_array)
+        metric.update(np.array([3.0, 4.0]), np.array([3.0, 5.0]))
 
-        self.assertEqual(calc_matrix, actual_matrix)
-    def test_nan_f1(self):
-        pred_array = np.array([1,np.nan,1,0,0])
-        true_array = np.array([1,1,0,0,0])
-        actual_f1score = 2/3
+        self.assertEqual(metric.result(), 0.5)
 
-        calc_f1score = f1score(pred_array, true_array)
 
-        self.assertEqual(calc_f1score,actual_f1score)
+class TestAUC(unittest.TestCase):
+    def test_perfect_auc(self):
+        score_array = np.array([0.1, 0.2, 0.8, 0.9])
+        true_array = np.array([0, 0, 1, 1])
+
+        metric = AUC()
+        metric.update(true_array, score_array)
+
+        self.assertEqual(metric.result(), 1.0)
+
+    def test_auc_across_chunks(self):
+        metric = AUC()
+        metric.update(np.array([0, 0]), np.array([0.1, 0.2]))
+
+        metric.update(np.array([1, 1]), np.array([0.8, 0.9]))
+
+        self.assertEqual(metric.result(), 1.0)
+
+    def test_auc_single_class_returns_zero(self):
+        metric = AUC()
+        metric.update(np.array([1, 1, 1]), np.array([0.4, 0.3, 0.6]))
+
+        self.assertEqual(metric.result(), 0.0)
+
+
+class TestRollingWindowMetric(unittest.TestCase):
+    def test_rolling_accuracy(self):
+        metric = RollingWindowMetric(Accuracy(), window_size=3)
+
+        metric.update(np.array([1, 0]), np.array([1, 1]))
+
+        metric.update(np.array([1, 0]), np.array([0, 0]))
+
+        self.assertAlmostEqual(metric.result(), 1 / 3)
+
+    def test_rolling_metric_reset(self):
+        metric = RollingWindowMetric(Accuracy(), window_size=3)
+
+        metric.update(np.array([1, 0]), np.array([1, 1]))
+
+        metric.reset()
+
+        self.assertAlmostEqual(metric.result(), 0.0)
+
+
 if __name__ == "__main__":
     unittest.main()
-
-

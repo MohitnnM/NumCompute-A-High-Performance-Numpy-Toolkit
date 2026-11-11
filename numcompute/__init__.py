@@ -12,84 +12,88 @@ vectorisation, numerical stability, consistent APIs, and reproducible behaviour.
 """
 
 from .io import load_csv
-
+from .metrics import (
+    AUC,
+    F1,
+    MSE,
+    Accuracy,
+    ConfusionMatrix,
+    Precision,
+    Recall,
+    RollingWindowMetric,
+)
 from .optim import grad, jacobian
-
+from .pipeline import Pipeline
 from .preprocessing import (
-    MinMaxScaler, 
-    OneHotEncoder, 
-    SimpleImputer, 
+    MinMaxScaler,
+    OneHotEncoder,
+    SimpleImputer,
     StandardScaler,
 )
-from .sort_search import (
-    stable_sort,
-    multi_key_sort,
-    topk,
-    quickselect,
-    binary_search,
-)
-
 from .rank import (
-    rank,
     percentile,
+    rank,
 )
-
+from .sort_search import (
+    binary_search,
+    multi_key_sort,
+    quickselect,
+    stable_sort,
+    topk,
+)
 from .stats import (
-    mean, 
-    median, 
-    stan_dev, 
-    min,
-    max, 
-    quantile, 
+    StreamingStats,
     histogram,
+    max,
+    mean,
+    median,
+    min,
+    quantile,
+    stan_dev,
 )
-
-from .metrics import (
-    accuracy, 
-    precision, 
-    recall, 
-    f1score, 
-    confusion_matrix, 
-    MSE,
+from .stream import StreamTrainer
+from .tree import DecisionTreeClassifier
+from .visualise import (
+    compare_models,
+    plot_metric_over_time,
+    plot_predictions_vs_ground_truth,
 )
-
-from .pipeline import Pipeline
 
 __all__ = [
     "load_csv",
-
     "grad",
     "jacobian",
-
     "MinMaxScaler",
     "OneHotEncoder",
     "SimpleImputer",
     "StandardScaler",
-
     "stable_sort",
-    "multi_key_sort"
+    "multi_key_sort",
     "topk",
     "quickselect",
     "binary_search",
-
     "rank",
     "percentile",
-
     "mean",
     "median",
     "stan_dev",
     "min",
     "max",
     "quantile",
-    "histogram"
-
-    "accuracy",
-    "precision",
-    "recall",
-    "f1score",
-    "confusion_matrix",
+    "histogram",
+    "StreamingStats",
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1",
+    "ConfusionMatrix",
     "MSE",
-
+    "AUC",
+    "RollingWindowMetric",
+    "DecisionTreeClassifier",
     "Pipeline",
-
+    "StreamTrainer",
+    "plot_metric_over_time",
+    "compare_models",
+    "plot_predictions_vs_ground_truth",
 ]

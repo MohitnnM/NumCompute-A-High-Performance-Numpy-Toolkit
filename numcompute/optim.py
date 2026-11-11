@@ -48,16 +48,21 @@ def _finite_difference_loop(func, x_arr, base_val, h, method):
     x_1d = np.atleast_1d(x_arr)
     n = len(x_1d)
 
-    nudges = h * np.eye(n)
     derivatives = []
 
     for i in range(n):
-        nudge_pos = (x_1d + nudges[i]).reshape(x_arr.shape)
+        x_pos = x_1d.copy()
+        x_pos[i] += h
+
+        nudge_pos = x_pos.reshape(x_arr.shape)
 
         if method == "forward":
             diff = (func(nudge_pos) - base_val) / h
         else:
-            nudge_neg = (x_1d - nudges[i]).reshape(x_arr.shape)
+            x_neg = x_1d.copy()
+            x_neg[i] -= h
+            nudge_neg = x_neg.reshape(x_arr.shape)
+
             diff = (func(nudge_pos) - func(nudge_neg)) / (2 * h)
 
         derivatives.append(diff)
@@ -96,7 +101,7 @@ def grad(f, x, h=1e-5, method="central"):
         O(n) calls to f for n inputs (2n for central).
 
     Space Complexity:
-        O(n^2) for the nudge matrix.
+        O(n) for preturbations and the returned gradient.
     """
 
     x_arr = _check_inputs(x, h, method)
@@ -141,7 +146,7 @@ def jacobian(F, x, h=1e-5, method="central"):
         O(n) calls to F for n inputs (2n for central).
 
     Space Complexity:
-        O(n^2 + m * n) for the nudge matrix and the result.
+        O(n + m * n)
     """
 
     x_arr = _check_inputs(x, h, method)

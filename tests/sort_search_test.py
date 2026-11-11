@@ -1,5 +1,5 @@
 """
-    Unit tests for sort_search.py module
+Unit tests for sort_search.py module
 """
 
 import unittest
@@ -10,11 +10,10 @@ import numcompute.sort_search as ss
 
 
 class TestStableSort(unittest.TestCase):
-
     def test_unsorted_array(self):
         arr = np.array([4, 2, 6, 1, 5, 3])
         expected_arr = np.array([1, 2, 3, 4, 5, 6])
-        
+
         result = ss.stable_sort(arr)
 
         np.testing.assert_array_equal(result, expected_arr)
@@ -22,7 +21,7 @@ class TestStableSort(unittest.TestCase):
     def test_sorted_array(self):
         arr = np.array([1, 2, 3, 4, 5, 6])
         expected_arr = np.array([1, 2, 3, 4, 5, 6])
-        
+
         result = ss.stable_sort(arr)
 
         np.testing.assert_array_equal(result, expected_arr)
@@ -30,7 +29,7 @@ class TestStableSort(unittest.TestCase):
     def test_duplicate_vals(self):
         arr = np.array([4, 2, 6, 6, 4, 3])
         expected_arr = np.array([2, 3, 4, 4, 6, 6])
-        
+
         result = ss.stable_sort(arr)
 
         np.testing.assert_array_equal(result, expected_arr)
@@ -40,13 +39,13 @@ class TestStableSort(unittest.TestCase):
         expected_arr = np.array([])
 
         result = ss.stable_sort(arr)
-        
+
         np.testing.assert_array_equal(result, expected_arr)
 
     def test_negative_vals(self):
         arr = np.array([-4, 2, 5, -6, 1, 3])
         expected_arr = np.array([-6, -4, 1, 2, 3, 5])
-        
+
         result = ss.stable_sort(arr)
 
         np.testing.assert_array_equal(result, expected_arr)
@@ -54,85 +53,66 @@ class TestStableSort(unittest.TestCase):
     def test_floating_vals(self):
         arr = np.array([4.2, 2.2, 2.3, 6.5, 1.2, 1.4, 1.6, 4.2, 2.6, 5])
         expected_arr = np.array([1.2, 1.4, 1.6, 2.2, 2.3, 2.6, 4.2, 4.2, 5, 6.5])
-        
+
         result = ss.stable_sort(arr)
 
         np.testing.assert_array_equal(result, expected_arr)
 
     def test_non_contiguous_array(self):
-        arr = np.array([6, 1, 2, 4, 5, 3])  
+        arr = np.array([6, 1, 2, 4, 5, 3])
         sliced_arr = arr[::2]
 
         expected_arr = np.array([2, 5, 6])
-        
+
         result = ss.stable_sort(sliced_arr)
 
         np.testing.assert_array_equal(result, expected_arr)
 
-        
-
 
 class TestMultiKeySort(unittest.TestCase):
-
     def test_multi_sort_with_2_keys(self):
-        arr = np.array([
-            [80, 22],
-            [90, 24],
-            [80, 20],
-            [90, 21]
-        ])
+        arr = np.array([[80, 22], [90, 24], [80, 20], [90, 21]])
 
-        expected_arr = np.array([
-            [80, 20],
-            [80, 22],
-            [90, 21],
-            [90, 24]
-        ])
+        expected_arr = np.array([[80, 20], [80, 22], [90, 21], [90, 24]])
 
         result = ss.multi_key_sort(arr, [0, 1])
 
         np.testing.assert_array_equal(result, expected_arr)
 
     def test_multi_sort_with_multiple_keys(self):
-        arr = np.array([
-            [1, 2, 3],
-            [1, 2, 4],
-            [1, 3, 5],
-            [1, 1, 2],
-            [2, 2, 1],
-            [2, 1, 1], 
-            [2, 2, 5]
-        ])
+        arr = np.array(
+            [
+                [1, 2, 3],
+                [1, 2, 4],
+                [1, 3, 5],
+                [1, 1, 2],
+                [2, 2, 1],
+                [2, 1, 1],
+                [2, 2, 5],
+            ]
+        )
 
-        expected_arr = np.array([
-            [1, 1, 2],
-            [1, 2, 3],
-            [1, 2, 4],
-            [1, 3, 5],
-            [2, 1, 1],
-            [2, 2, 1],
-            [2, 2, 5]
-        ])
+        expected_arr = np.array(
+            [
+                [1, 1, 2],
+                [1, 2, 3],
+                [1, 2, 4],
+                [1, 3, 5],
+                [2, 1, 1],
+                [2, 2, 1],
+                [2, 2, 5],
+            ]
+        )
 
         result = ss.multi_key_sort(arr, [0, 1, 2])
 
         np.testing.assert_array_equal(result, expected_arr)
 
     def test_one_sorting_key(self):
-        
-        arr = np.array([
-            [2, 2],
-            [4, 3],
-            [1, 4],
-            [3, 5]
-        ])
 
-        expected_arr = np.array([
-            [1, 4],
-            [2, 2],
-            [3, 5],
-            [4, 3]
-        ])
+        arr = np.array([[2, 2], [4, 3], [1, 4], [3, 5]])
+
+        expected_arr = np.array([[1, 4], [2, 2], [3, 5], [4, 3]])
 
         result = ss.multi_key_sort(arr, [0])
 
@@ -145,34 +125,19 @@ class TestMultiKeySort(unittest.TestCase):
             ss.multi_key_sort(arr, [])
 
     def test_raise_value_error_if_keys_arr_empty(self):
-        arr = np.array([
-            [2, 2],
-            [4, 3],
-            [1, 4],
-            [3, 5]
-        ])
+        arr = np.array([[2, 2], [4, 3], [1, 4], [3, 5]])
 
         with self.assertRaises(ValueError):
             ss.multi_key_sort(arr, [])
-    
+
     def test_raise__index_error_if_keys_negative(self):
-        arr = np.array([
-            [2, 2],
-            [4, 3],
-            [1, 4],
-            [3, 5]
-        ])
+        arr = np.array([[2, 2], [4, 3], [1, 4], [3, 5]])
 
         with self.assertRaises(IndexError):
             ss.multi_key_sort(arr, [-1])
 
     def test_raise_index_error_if_keys_out_of_range(self):
-        arr = np.array([
-            [2, 2],
-            [4, 3],
-            [1, 4],
-            [3, 5]
-        ])
+        arr = np.array([[2, 2], [4, 3], [1, 4], [3, 5]])
 
         with self.assertRaises(IndexError):
             ss.multi_key_sort(arr, [2])
@@ -252,7 +217,7 @@ class TestTopK(unittest.TestCase):
             ss.topk(arr, -2, True, False)
 
     def test_raise_value_error_if_k_zero(self):
-        
+
         arr = np.array([5, 4, 10, 23, 19, 1, 6, 15, 26])
 
         with self.assertRaises(ValueError):
@@ -351,14 +316,28 @@ class TestQuickSelect(unittest.TestCase):
             ss.quickselect(arr, 0)
 
     def test_raise_value_error_if_array_is_two_d(self):
-        arr = np.array([
-            [1, 2],
-            [3, 4]
-        ])
+        arr = np.array([[1, 2], [3, 4]])
 
         with self.assertRaises(ValueError):
             ss.quickselect(arr, 2)
-    
+
+    def test_quickselect_duplicate_heavy_input(self):
+        values = np.array([5, 5, 5, 5, 5, 5, 5])
+
+        for k in range(1, len(values) + 1):
+            self.assertEqual(ss.quickselect(values.copy(), k), 5)
+
+    def test_quickselect_with_many_duplicates(self):
+        values = np.array([4, 2, 4, 1, 4, 3, 4])
+
+        expected = np.sort(values)
+
+        for k in range(1, len(values) + 1):
+            self.assertEqual(
+                ss.quickselect(values.copy(), k),
+                expected[k - 1],
+            )
+
 
 class TestBinarySearch(unittest.TestCase):
     def test_value_found_in_middle(self):
@@ -388,7 +367,7 @@ class TestBinarySearch(unittest.TestCase):
         result = ss.binary_search(arr, 4)
 
         self.assertEqual(result, (2, False))
-    
+
     def test_value_larger_then_rest(self):
         arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
@@ -423,6 +402,7 @@ class TestBinarySearch(unittest.TestCase):
         result = ss.binary_search(arr, 3)
 
         self.assertEqual(result, (0, False))
-    
+
+
 if __name__ == "__main__":
     unittest.main()

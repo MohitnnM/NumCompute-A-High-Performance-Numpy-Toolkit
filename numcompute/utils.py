@@ -20,39 +20,38 @@ from numcompute.exceptions import NotFittedError
 
 
 def check_array(X, dtype=float, allow_nan=False):
-
     """
-        Converts input to a NumPy array and checks that it is a non-empty
-        2D array.
+    Converts input to a NumPy array and checks that it is a non-empty
+    2D array.
 
-        Parameters:
-            X:
-                Array-like input of shape (n_samples, n_features).
+    Parameters:
+        X:
+            Array-like input of shape (n_samples, n_features).
 
-            dtype:
-                Target dtype. Defaults to float. Use None to keep the
-                input's dtype (e.g. strings for OneHotEncoder).
+        dtype:
+            Target dtype. Defaults to float. Use None to keep the
+            input's dtype (e.g. strings for OneHotEncoder).
 
-            allow_nan:
-                If False (default), numeric input containing NaN or Inf
-                is rejected.
+        allow_nan:
+            If False (default), numeric input containing NaN or Inf
+            is rejected.
 
-        Returns:
-            A 2D NumPy array of shape (n_samples, n_features).
+    Returns:
+        A 2D NumPy array of shape (n_samples, n_features).
 
-        Raises:
-            TypeError:
-                If X cannot be converted to dtype.
+    Raises:
+        TypeError:
+            If X cannot be converted to dtype.
 
-            ValueError:
-                If X is ragged, not 2D, empty, or contains NaN/Inf when
-                allow_nan is False. 1D input is rejected, not reshaped.
+        ValueError:
+            If X is ragged, not 2D, empty, or contains NaN/Inf when
+            allow_nan is False. 1D input is rejected, not reshaped.
 
-        Time Complexity:
-            O(n) where n is the number of elements in X.
+    Time Complexity:
+        O(n) where n is the number of elements in X.
 
-        Space Complexity:
-            O(n) if X has to be copied or converted, otherwise O(1).
+    Space Complexity:
+        O(n) if X has to be copied or converted, otherwise O(1).
     """
 
     try:
@@ -74,9 +73,7 @@ def check_array(X, dtype=float, allow_nan=False):
             "for a single sample."
         )
     if X_arr.ndim > 2:
-        raise ValueError(
-            f"Expected a 2D array, got a {X_arr.ndim}D array instead."
-        )
+        raise ValueError(f"Expected a 2D array, got a {X_arr.ndim}D array instead.")
 
     if X_arr.size == 0:
         raise ValueError("Input array is empty (zero rows or columns).")
@@ -92,29 +89,28 @@ def check_array(X, dtype=float, allow_nan=False):
 
 
 def check_is_fitted(estimator, attributes):
-
     """
-        Checks that an estimator has been fitted.
+    Checks that an estimator has been fitted.
 
-        Fitted attributes (e.g. mean_, scale_) must only be created inside
-        fit, never in __init__, so their absence means "not fitted".
+    Fitted attributes (e.g. mean_, scale_) must only be created inside
+    fit, never in __init__, so their absence means "not fitted".
 
-        Parameters:
-            estimator:
-                The transformer or model instance to check.
+    Parameters:
+        estimator:
+            The transformer or model instance to check.
 
-            attributes:
-                Name, or list of names, of attributes set by fit.
+        attributes:
+            Name, or list of names, of attributes set by fit.
 
-        Raises:
-            NotFittedError:
-                If any of the attributes is missing.
+    Raises:
+        NotFittedError:
+            If any of the attributes is missing.
 
-        Time Complexity:
-            O(k) where k is the number of attributes.
+    Time Complexity:
+        O(k) where k is the number of attributes.
 
-        Space Complexity:
-            O(1).
+    Space Complexity:
+        O(1).
     """
 
     if isinstance(attributes, str):
@@ -126,40 +122,41 @@ def check_is_fitted(estimator, attributes):
             "Call 'fit' before using this estimator."
         )
 
+
 def check_1d_array(X, dtype=float, allow_nan=False, allow_empty_arr=False):
     """
-        Converts input to a NumPy array and checks that it is a non-empty
-        1D array.
+    Converts input to a NumPy array and checks that it is a non-empty
+    1D array.
 
-        Parameters:
-            X:
-                Array-like input of shape (n_features,).
+    Parameters:
+        X:
+            Array-like input of shape (n_features,).
 
-            dtype:
-                Target dtype. Defaults to float. Use None to keep the
-                input's dtype (e.g. strings for OneHotEncoder).
+        dtype:
+            Target dtype. Defaults to float. Use None to keep the
+            input's dtype (e.g. strings for OneHotEncoder).
 
-            allow_nan:
-                If False (default), numeric input containing NaN or Inf
-                is rejected.
+        allow_nan:
+            If False (default), numeric input containing NaN or Inf
+            is rejected.
 
-        Returns:
-            A 1D NumPy array of shape (n_features,).
+    Returns:
+        A 1D NumPy array of shape (n_features,).
 
-        
-        Raises:
-            TypeError:
-                If X cannot be converted to dtype.
 
-            ValueError:
-                If X is ragged, not 1D, empty, or contains NaN/Inf when
-                allow_nan is False.
+    Raises:
+        TypeError:
+            If X cannot be converted to dtype.
 
-        Time Complexity:
-            O(n) where n is the number of elements in X.
+        ValueError:
+            If X is ragged, not 1D, empty, or contains NaN/Inf when
+            allow_nan is False.
 
-        Space Complexity:
-            O(n) if X has to be copied or converted, otherwise O(1).
+    Time Complexity:
+        O(n) where n is the number of elements in X.
+
+    Space Complexity:
+        O(n) if X has to be copied or converted, otherwise O(1).
     """
 
     try:
@@ -171,14 +168,10 @@ def check_1d_array(X, dtype=float, allow_nan=False, allow_empty_arr=False):
             ) from e
 
         dtype_name = getattr(dtype, "__name__", dtype)
-        raise TypeError(
-            f"Input cannot be converted to {dtype_name}."
-        ) from e
+        raise TypeError(f"Input cannot be converted to {dtype_name}.") from e
 
     if X_arr.ndim != 1:
-        raise ValueError(
-            f"Expected a 1D array, got a {X_arr.ndim}D array instead."
-        )
+        raise ValueError(f"Expected a 1D array, got a {X_arr.ndim}D array instead.")
 
     if X_arr.size == 0 and not allow_empty_arr:
         raise ValueError("Input array is empty.")

@@ -1,5 +1,5 @@
 """
-    Unit tests for the io.py module
+Unit tests for the io.py module
 """
 
 import unittest
@@ -13,15 +13,17 @@ class TestLoadCSV(unittest.TestCase):
     def test_load_csv(self):
         file = "tests/test_csv_files/general_file.csv"
 
-        expected_array = np.array([
-            [1,2,3],
-            [4,5,6],
-            [7,8,9],
-            [10,11,12],
-            [13,14,15],
-            [16,17,18],
-            [19,20,21]
-        ])
+        expected_array = np.array(
+            [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+                [10, 11, 12],
+                [13, 14, 15],
+                [16, 17, 18],
+                [19, 20, 21],
+            ]
+        )
 
         resulting_array = load_csv(file)
 
@@ -30,7 +32,6 @@ class TestLoadCSV(unittest.TestCase):
     def test_array(self):
         file = "tests/test_csv_files/general_file.csv"
 
-
         resulting_array = load_csv(file)
 
         self.assertIsInstance(resulting_array, np.ndarray)
@@ -38,15 +39,17 @@ class TestLoadCSV(unittest.TestCase):
     def test_custom_delimiter_tab(self):
         file = "tests/test_csv_files/tab_delimiter_test.csv"
 
-        expected_array = np.array([
-            [1,2,3],
-            [4,5,6],
-            [7,8,9],
-            [10,11,12],
-            [13,14,15],
-            [16,17,18],
-            [19,20,21]
-        ])
+        expected_array = np.array(
+            [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+                [10, 11, 12],
+                [13, 14, 15],
+                [16, 17, 18],
+                [19, 20, 21],
+            ]
+        )
 
         resulting_array = load_csv(file, file_delimiter="\t")
 
@@ -55,15 +58,17 @@ class TestLoadCSV(unittest.TestCase):
     def test_custom_delimiter_semicolon(self):
         file = "tests/test_csv_files/semicolon_delimiter_test.csv"
 
-        expected_array = np.array([
-            [1,2,3],
-            [4,5,6],
-            [7,8,9],
-            [10,11,12],
-            [13,14,15],
-            [16,17,18],
-            [19,20,21]
-        ])
+        expected_array = np.array(
+            [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+                [10, 11, 12],
+                [13, 14, 15],
+                [16, 17, 18],
+                [19, 20, 21],
+            ]
+        )
 
         resulting_array = load_csv(file, ";")
 
@@ -72,15 +77,17 @@ class TestLoadCSV(unittest.TestCase):
     def test_single_missing_value(self):
         file = "tests/test_csv_files/missing_data_single.csv"
 
-        expected_array = np.array([
-            [1,2,np.nan],
-            [4,5,6],
-            [7,8,9],
-            [10,11,12],
-            [13,14,15],
-            [16,17,18],
-            [19,20,21]
-        ])
+        expected_array = np.array(
+            [
+                [1, 2, np.nan],
+                [4, 5, 6],
+                [7, 8, 9],
+                [10, 11, 12],
+                [13, 14, 15],
+                [16, 17, 18],
+                [19, 20, 21],
+            ]
+        )
 
         resulting_array = load_csv(file)
 
@@ -89,15 +96,17 @@ class TestLoadCSV(unittest.TestCase):
     def test_missing_values_test(self):
         file = "tests/test_csv_files/missing_data_multiple.csv"
 
-        expected_array = np.array([
-            [1,2,np.nan],
-            [4,5,6],
-            [7,np.nan,9],
-            [10,11,12],
-            [13,14,15],
-            [16,17,np.nan],
-            [19,20,21]
-        ])
+        expected_array = np.array(
+            [
+                [1, 2, np.nan],
+                [4, 5, 6],
+                [7, np.nan, 9],
+                [10, 11, 12],
+                [13, 14, 15],
+                [16, 17, np.nan],
+                [19, 20, 21],
+            ]
+        )
 
         resulting_array = load_csv(file)
 
@@ -106,15 +115,17 @@ class TestLoadCSV(unittest.TestCase):
     def test_negative_float_numbers(self):
         file = "tests/test_csv_files/negative_floating_numbers_test.csv"
 
-        expected_array = np.array([
-            [1,2,-3],
-            [4,-5,6],
-            [7,8,9.4],
-            [-10.23,11,12],
-            [13,14.6,15],
-            [16,-17,18],
-            [19,20.1,21]
-        ])
+        expected_array = np.array(
+            [
+                [1, 2, -3],
+                [4, -5, 6],
+                [7, 8, 9.4],
+                [-10.23, 11, 12],
+                [13, 14.6, 15],
+                [16, -17, 18],
+                [19, 20.1, 21],
+            ]
+        )
 
         resulting_array = load_csv(file)
 
@@ -137,6 +148,8 @@ class TestLoadCSV(unittest.TestCase):
 
         result = load_csv(file)
 
-        np.testing.assert_array_equal(result.shape,[1,3])
+        np.testing.assert_array_equal(result.shape, [1, 3])
+
+
 if __name__ == "__main__":
     unittest.main()
